@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useless Facts Room - Line Tech Softwares</title>
+    <meta name="description" content="Discover random and interesting facts with Useless Facts Room! A fun mobile app created by Line Tech Softwares. Available for Android. Test your knowledge today.">
+    <meta name="keywords" content="useless facts, trivia game, random facts, fun facts app, educational game, mobile app, Android app, Line Tech, interesting facts, knowledge">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://linetechsoftwares.co.za/uselessfactsroom.html">
+    <meta property="og:title" content="Useless Facts Room - Mobile App">
+    <meta property="og:description" content="Discover random and interesting facts with Useless Facts Room! A fun mobile app created by Line Tech Softwares.">
+    <meta property="og:image" content="./uselessfactsroom/welcome_screen.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://linetechsoftwares.co.za/uselessfactsroom.html">
+    <meta property="twitter:title" content="Useless Facts Room - Mobile App">
+    <meta property="twitter:description" content="Discover random and interesting facts with Useless Facts Room! A fun mobile app created by Line Tech Softwares.">
+    <meta property="twitter:image" content="./uselessfactsroom/welcome_screen.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./ASSETS/Line-Tech-Logo-2.ico">
+      <!-- Favicon for online deployment -->
+    <link rel="icon" href="./ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    <link rel="icon" href="/Line-Tech-Logo-2.ico" type="image/png" sizes="512x512">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="./CSS/index.css">
+    <link rel="stylesheet" href="./CSS/uselessfactsroom.css">
+    <link rel="stylesheet" href="./CSS/Hamburgermenu.css">
+    <link rel="stylesheet" href="./CSS/cookieBanner.css">
+</head>
+<body>
+        <!-- Cookie Banner -->
+        <div id="cookie-banner" style="display: none;">
+            <div id="cookie-banner-content">
+                <h2 id="cookie-banner-title">We Use Cookies</h2>
+                <p id="cookie-banner-text">We use essential cookies to provide our services and improve your experience. By continuing to browse our site, you consent to our use of cookies.</p>
+            </div>
+            <button id="cookie-accept">Ok, I got it</button>
+        </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="./ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img">
+                    <span class="logo-text">Line Tech Softwares</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="nav-desktop">
+                    <a href="./index.html" class="nav-link">Home</a>
+                    <a href="./index.html#services" class="nav-link">Services</a>
+                    <a href="./projects.html" class="nav-link">Projects</a>
+                    <a href="./index.html#about" class="nav-link">About Us</a>
+                    <a href="./index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="./index.html" class="nav-link-mobile">Home</a>
+                <a href="./index.html#services" class="nav-link-mobile">Services</a>
+                <a href="./projects.html" class="nav-link-mobile">Projects</a>
+                <a href="./index.html#about" class="nav-link-mobile">About Us</a>
+                <a href="./index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+  <!-- Product Overview -->
+<section class="product-hero">
+    <div class="container">
+        <div style="display:flex;gap:2rem;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+            <div style="flex:1;min-width:280px;">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    <span>Our Latest Creation</span>
+                </div>
+                <h1 style="text-align:left;margin-top:0;">Useless Facts Room</h1>
+                <p class="product-tagline" style="text-align:left;max-width:640px;">
+                    A lightweight mobile app for discovering random and interesting facts.
+                </p>
+            </div>
+
+            <div style="flex:0 0 320px;display:flex;justify-content:center;align-items:center;min-width:220px;">
+                <img src="./uselessfactsroom/welcome_screen.png" alt="App preview" style="width:260px;height:auto;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,0.4);" onerror="this.src='./ASSETS/images/project-portfolio.jpg'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Download Section -->
+<section class="product-download">
+    <div class="container" style="text-align:center;padding:2.5rem 0;">
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="#android" class="cta-button primary" style="min-width:220px;padding:1rem 1.5rem;">Download for Android</a>
+            <a href="#ios" class="cta-button secondary" style="min-width:220px;padding:1rem 1.5rem; opacity: 0.6; cursor: not-allowed;" disabled>iOS (Technical Issues)</a>
+            <p style="color: #f59e0b; font-size: 0.9rem; margin-top: 1rem; text-align: center;">📱 iOS version is currently undergoing technical maintenance. Check back soon!</p>
+        </div>
+        <p style="margin-top:0.75rem;color:#cbd5e1;">Latest version always available here.</p>
+    </div>
+</section>
+
+<!-- Screenshots -->
+<section class="product-screenshots">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-images"></i> App Screenshots</h2>
+            <p>See the app in action across different screens and gameplay stages.</p>
+        </div>
+        <div class="screenshots-grid">
+            <div class="screenshot-item">
+                <img src="./uselessfactsroom/welcome_screen.png" alt="Welcome Screen" onerror="this.src='./ASSETS/images/project-portfolio.jpg'">
+                <h4>Welcome Screen</h4>
+                <p>Start your trivia journey</p>
+            </div>
+            <div class="screenshot-item">
+                <img src="./uselessfactsroom/cute_fact_screen.png" alt="Fact Screen" onerror="this.src='./ASSETS/images/project-portfolio.jpg'">
+                <h4>Question Screen</h4>
+                <p>Test your knowledge</p>
+            </div>
+            <div class="screenshot-item">
+                <img src="./uselessfactsroom/settings_screen.png" alt="Settings Screen" onerror="this.src='./ASSETS/images/project-portfolio.jpg'">
+                <h4>Settings & Options</h4>
+                <p>Customize your experience</p>
+            </div>
+            <div class="screenshot-item">
+                <img src="./uselessfactsroom/achievements_screen.png" alt="Achievements Screen" onerror="this.src='./ASSETS/images/project-portfolio.jpg'">
+                <h4>Achievements</h4>
+                <p>Unlock and collect badges</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Description -->
+<section class="product-description">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-lightbulb"></i> About the App</h2>
+        </div>
+        <p>
+            Useless Facts Room is a cross-platform mobile trivia application designed to entertain,
+            challenge, and surprise users with interesting and completely useless facts.
+            The app includes difficulty levels, achievements, sound effects, haptic feedback,
+            and offline play support.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h4>Multiple Difficulties</h4>
+                <p>Easy, Medium, and Hard modes for all skill levels</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h4>Achievements</h4>
+                <p>Unlock badges and track your progress</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-wifi-off"></i>
+                </div>
+                <h4>Offline Support</h4>
+                <p>Play anywhere, anytime without internet</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <h4>Audio & Haptics</h4>
+                <p>Sound effects and vibration feedback</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Installation Section -->
+<section id="installation" class="installation">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-download"></i> Installation</h2>
+            <p>Step-by-step instructions for Android and iOS</p>
+        </div>
+
+        <div class="download-columns">
+            <div id="android" class="download-card">
+                <div class="card-icon">
+                    <i class="fab fa-android"></i>
+                </div>
+                <h3>Android Installation</h3>
+                <ol>
+                    <li>Install <strong>Expo Go</strong> from Google Play Store.</li>
+                    <li>Open Expo Go.</li>
+                    <li>Scan the provided QR code or open the shared project link.</li>
+                    <li>The app will launch instantly.</li>
+                </ol>
+            </div>
+
+            <div id="ios" class="download-card">
+                <div class="card-icon">
+                    <i class="fab fa-apple"></i>
+                </div>
+                <h3>iOS Installation</h3>
+                <ol>
+                    <li>Install <strong>Expo Go</strong> from the App Store.</li>
+                    <li>Open Expo Go.</li>
+                    <li>Scan the project QR code.</li>
+                    <li>App Store release pending due to developer account costs.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Developer Notes -->
+<section class="developer-notes">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-code"></i> Developer Notes</h2>
+        </div>
+        <p>Useless Facts Room is built with Expo and React Native. We use AsyncStorage for local persistence and plan continued updates to improve performance and add new content.</p>
+    </div>
+</section>
+
+<!-- Support Section -->
+<section class="support-section">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-life-ring"></i> Need Help</h2>
+        </div>
+        <ul>
+            <li>App won't start: Ensure Expo Go is installed and scan the correct QR code.</li>
+            <li>Missing content/offline issues: Open the app while online to refresh cached data.</li>
+            <li>Crashes or freezes: Restart the app and check for updates; contact support if persistent.</li>
+        </ul>
+    </div>
+</section>
+
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JDQ0LWHM8J');
+        </script>
+
+        <!-- JavaScript Files -->
+        <script src="./JS/index.js"></script>
+        <script src="./JS/uselessfactsroom.js"></script>
+        <script src="./JS/cookieBanner.js"></script>
+</body>
+</html>

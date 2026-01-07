@@ -1,0 +1,238 @@
+/* ===== HAMBURGER MENU STYLES - Hamburgermenu.css ===== */
+
+/* Hamburger Button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.hamburger:hover {
+    transform: scale(1.1);
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+/* Hamburger Animation States */
+.hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Navigation Overlay */
+.nav-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translateY(-100%);
+}
+
+.nav-mobile.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Mobile Navigation Links */
+.nav-link-mobile {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 200px;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link-mobile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+
+.nav-link-mobile:hover::before,
+.nav-link-mobile.active::before {
+    left: 0;
+}
+
+.nav-link-mobile:hover,
+.nav-link-mobile.active {
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Mobile Navigation Animation */
+.nav-link-mobile {
+    animation: slideInFromRight 0.5s ease forwards;
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+.nav-mobile.active .nav-link-mobile:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.nav-mobile.active .nav-link-mobile:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nav-mobile.active .nav-link-mobile:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.nav-mobile.active .nav-link-mobile:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.nav-mobile.active .nav-link-mobile:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+@keyframes slideInFromRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Mobile Menu Background Effects */
+.nav-mobile::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+    z-index: -1;
+    animation: pulseBackground 3s ease-in-out infinite;
+}
+
+@keyframes pulseBackground {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive Hamburger Menu */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-desktop {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-link-mobile {
+        font-size: 1.3rem;
+        min-width: 180px;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .hamburger-line,
+    .nav-mobile,
+    .nav-link-mobile,
+    .nav-mobile::after {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Focus States for Accessibility */
+.hamburger:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.nav-link-mobile:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .hamburger-line {
+        background: #ffffff;
+    }
+    
+    .nav-mobile {
+        background: #000000;
+        border: 2px solid #ffffff;
+    }
+    
+    .nav-link-mobile {
+        border-color: #ffffff;
+        color: #ffffff;
+    }
+    
+    .nav-link-mobile:hover,
+    .nav-link-mobile.active {
+        background: #ffffff;
+        color: #000000;
+    }
+}
