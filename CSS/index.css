@@ -80,6 +80,10 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    white-space: nowrap;
+    max-width: 60vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Desktop Navigation */
@@ -246,6 +250,13 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     .hero-track { transition: none !important; }
+}
+
+/* Reduce logo size on very small screens to avoid overlap */
+@media (max-width: 420px) {
+    .logo-text {
+        font-size: 1.05rem;
+    }
 }
 
 .hero-title {

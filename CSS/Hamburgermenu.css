@@ -13,9 +13,9 @@
     padding: 0;
     z-index: 1001;
     transition: all 0.3s ease;
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
+    /* place hamburger in the header flow so it respects container padding */
+    position: relative;
+    margin-left: auto;
 }
 
 .hamburger:hover {
