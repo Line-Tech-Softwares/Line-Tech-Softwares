@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard - Line Tech Softwares</title>
+    <meta name="description" content="Weather Dashboard - A responsive weather application with real-time data and forecasts.">
+    <meta name="keywords" content="Weather, dashboard, weather app, real-time, forecast">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./ASSETS/Line-Tech-Logo-2.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="./CSS/index.css">
+    <link rel="stylesheet" href="./CSS/cookieBanner.css">
+    
+    <style>
+        .app-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem 1rem;
+        }
+        
+        .app-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .app-header h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        .app-image-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .app-image-section img {
+            max-width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 212, 200, 0.2);
+        }
+        
+        .app-info-section {
+            background: #1a1b23;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .app-info-section h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .app-info-section p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .app-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .app-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #00D4C8;
+            color: #0C0D0E;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .app-link-btn:hover {
+            background: #00a89c;
+        }
+        
+        .app-link-btn.secondary {
+            background: transparent;
+            color: #00D4C8;
+            border: 2px solid #00D4C8;
+        }
+        
+        .app-link-btn.secondary:hover {
+            background: #00D4C8;
+            color: #0C0D0E;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00D4C8;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: #00a89c;
+        }
+        
+        @media (max-width: 768px) {
+            .app-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .app-container {
+                margin-top: 1rem;
+            }
+            
+            .app-image-section img {
+                max-width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2 id="cookie-banner-title">We Use Cookies</h2>
+            <p id="cookie-banner-text">We use essential cookies to provide our services and improve your experience. By continuing to browse our site, you consent to our use of cookies.</p>
+        </div>
+        <button id="cookie-accept">Ok, I got it</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="./ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img">
+                    <span class="logo-text">Line Tech Softwares</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="nav-desktop">
+                    <a href="./index.html" class="nav-link">Home</a>
+                    <a href="./index.html#services" class="nav-link">Services</a>
+                    <a href="./projects.html" class="nav-link">Projects</a>
+                    <a href="./index.html#about" class="nav-link">About Us</a>
+                    <a href="./index.html#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="./index.html" class="nav-link-mobile">Home</a>
+                <a href="./index.html#services" class="nav-link-mobile">Services</a>
+                <a href="./projects.html" class="nav-link-mobile">Projects</a>
+                <a href="./index.html#about" class="nav-link-mobile">About Us</a>
+                <a href="./index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- App Section -->
+    <div class="app-container">
+        <a href="./projects.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Projects
+        </a>
+        
+        <div class="app-header">
+            <h1>Weather Dashboard</h1>
+            <p>Real-time weather data and forecasts</p>
+        </div>
+        
+        <div class="app-image-section">
+            <img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=500&h=500&fit=crop" alt="Weather Dashboard">
+        </div>
+        
+        <div class="app-info-section">
+            <h2>About This Project</h2>
+            <p>The Weather Dashboard is a responsive web application that provides real-time weather data and forecasts. Built with modern web technologies, it features an intuitive interface that displays current conditions, hourly forecasts, and extended weather predictions.</p>
+            
+            <p><strong>Features:</strong></p>
+            <ul style="color: #cbd5e1; padding-left: 1.5rem; line-height: 2;">
+                <li>Real-time weather data from public APIs</li>
+                <li>Current conditions and extended forecast</li>
+                <li>Hourly and daily weather updates</li>
+                <li>Responsive design for all devices</li>
+                <li>Clean and intuitive user interface</li>
+            </ul>
+            
+            <div class="app-links">
+                <a href="https://griffin71.github.io/weather-dashboard/" target="_blank" class="app-link-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Live Demo
+                </a>
+                <a href="https://github.com/Griffin71/weather-dashboard" target="_blank" class="app-link-btn secondary">
+                    <i class="fab fa-github"></i>
+                    Source Code
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <p class="footer-tagline">Plug into Possibility</p>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./index.html#services">Services</a></li>
+                        <li><a href="./projects.html">Projects</a></li>
+                        <li><a href="./index.html#about">About Us</a></li>
+                        <li><a href="./index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="./index.html#services">Microsoft Installation + Free Office Suite</a></li>
+                        <li><a href="./index.html#services">Linux Installation</a></li>
+                        <li><a href="./index.html#services">Laptop Password Recovery & Security</a></li>
+                        <li><a href="./index.html#services">Tutoring & Coding Lessons</a></li>
+                        <li><a href="./index.html#services">Mobile Phone Software Support</a></li>
+                        <li><a href="./index.html#services">Website Development</a></li>
+                        <li><a href="./index.html#services">App Development</a></li>
+                        <li><a href="./index.html#services">IT Consulting</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pretoria, South Africa</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@linetechsoftwares.co.za</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+27 71 183 1818</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+    </script>
+
+    <!-- JavaScript Files -->
+    <script src="./JS/index.js"></script>
+    <script src="./JS/cookieBanner.js"></script>
+</body>
+</html>

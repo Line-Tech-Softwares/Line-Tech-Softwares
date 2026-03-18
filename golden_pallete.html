@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Palette Co - Line Tech Softwares</title>
+    <meta name="description" content="Golden Palette Co - A beautiful chef application built with React Native.">
+    <meta name="keywords" content="Golden Palette, cheff, app, react native, color palette">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./ASSETS/Line-Tech-Logo-2.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="./CSS/index.css">
+    <link rel="stylesheet" href="./CSS/cookieBanner.css">
+    
+    <style>
+        .app-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem 1rem;
+        }
+        
+        .app-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .app-header h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        .app-image-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .app-image-section img {
+            max-width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 212, 200, 0.2);
+        }
+        
+        .app-embed-section {
+            background: #1a1b23;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00D4C8;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: #00a89c;
+        }
+        
+        @media (max-width: 768px) {
+            .app-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .app-container {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2 id="cookie-banner-title">We Use Cookies</h2>
+            <p id="cookie-banner-text">We use essential cookies to provide our services and improve your experience. By continuing to browse our site, you consent to our use of cookies.</p>
+        </div>
+        <button id="cookie-accept">Ok, I got it</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="./ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img">
+                    <span class="logo-text">Line Tech Softwares</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="nav-desktop">
+                    <a href="./index.html" class="nav-link">Home</a>
+                    <a href="./index.html#services" class="nav-link">Services</a>
+                    <a href="./projects.html" class="nav-link">Projects</a>
+                    <a href="./index.html#about" class="nav-link">About Us</a>
+                    <a href="./index.html#contact" class="nav-link">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="./index.html" class="nav-link-mobile">Home</a>
+                <a href="./index.html#services" class="nav-link-mobile">Services</a>
+                <a href="./projects.html" class="nav-link-mobile">Projects</a>
+                <a href="./index.html#about" class="nav-link-mobile">About Us</a>
+                <a href="./index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- App Section -->
+    <div class="app-container">
+        <a href="./projects.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Projects
+        </a>
+        
+        <div class="app-header">
+            <h1>Golden Palette Co</h1>
+            <p>A beautiful resturant app</p>
+        </div>
+        
+        <div class="app-image-section">
+            <img src="./ASSETS/chef_hat.png" alt="Golden Palette Co">
+        </div>
+        
+        <div class="app-embed-section">
+            <div data-snack-id="@kabelo00/golden-pallete-co" data-snack-platform="mydevice" data-snack-preview="true" data-snack-theme="dark" style="overflow:hidden;background:#0C0D0E;border:1px solid var(--color-border);border-radius:4px;height:505px;width:100%"></div>
+            <script async src="https://snack.expo.dev/embed.js"></script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <p class="footer-tagline">Plug into Possibility</p>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./index.html#services">Services</a></li>
+                        <li><a href="./projects.html">Projects</a></li>
+                        <li><a href="./index.html#about">About Us</a></li>
+                        <li><a href="./index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="./index.html#services">Microsoft Installation + Free Office Suite</a></li>
+                        <li><a href="./index.html#services">Linux Installation</a></li>
+                        <li><a href="./index.html#services">Laptop Password Recovery & Security</a></li>
+                        <li><a href="./index.html#services">Tutoring & Coding Lessons</a></li>
+                        <li><a href="./index.html#services">Mobile Phone Software Support</a></li>
+                        <li><a href="./index.html#services">Website Development</a></li>
+                        <li><a href="./index.html#services">App Development</a></li>
+                        <li><a href="./index.html#services">IT Consulting</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pretoria, South Africa</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@linetechsoftwares.co.za</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+27 71 183 1818</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+    </script>
+
+    <!-- JavaScript Files -->
+    <script src="./JS/index.js"></script>
+    <script src="./JS/cookieBanner.js"></script>
+</body>
+</html>

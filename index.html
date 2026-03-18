@@ -754,12 +754,23 @@
 
     <!-- Terms and Privacy Section -->
     <section style="background: linear-gradient(180deg, #0a0a0a 0%, #111827 100%); padding: 4rem 0;">
+        <style>
+            @media (max-width: 768px) {
+                .terms-privacy-grid {
+                    grid-template-columns: 1fr !important;
+                }
+                .terms-box, .privacy-box {
+                    height: auto !important;
+                    overflow-y: visible !important;
+                }
+            }
+        </style>
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto;">
+            <div class="terms-privacy-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto;">
                 <!-- Terms & Conditions -->
                 <div>
                     <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff;">Terms & Conditions</h2>
-                    <div style="background: rgba(31, 41, 55, 0.8); padding: 2rem; border-radius: 12px; height: 400px; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <div class="terms-box" style="background: rgba(31, 41, 55, 0.8); padding: 2rem; border-radius: 12px; height: 400px; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.2);">
                         <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 0.75rem; color: #fff;">1. Acceptance of Terms</h3>
                         <p style="color: #9ca3af; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6;">By accessing and using Line Tech's services, you agree to be bound by these Terms and Conditions.</p>
 
@@ -795,7 +806,7 @@
                 <!-- Privacy Policy -->
                 <div>
                     <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff;" id="privacy-policy">Privacy Policy</h2>
-                    <div style="background: rgba(31, 41, 55, 0.8); padding: 2rem; border-radius: 12px; height: 400px; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <div class="privacy-box" style="background: rgba(31, 41, 55, 0.8); padding: 2rem; border-radius: 12px; height: 400px; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.2);">
                         <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 0.75rem; color: #fff;">1. Information We Collect</h3>
                         <p style="color: #9ca3af; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6;">We collect personal information such as name, email, phone number, and service preferences when you contact us or use our services.</p>
 
