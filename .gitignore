@@ -1,0 +1,7 @@
+backend/node_modules/
+sdk-js/node_modules/
+sdk-python/__pycache__/
+.env
+*.log
+node_modules/
+.DS_Store

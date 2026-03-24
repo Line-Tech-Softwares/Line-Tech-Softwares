@@ -15,4 +15,12 @@ ASSETS/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 ASSETS/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 ASSETS/**/*.gif filter=lfs diff=lfs merge=lfs -text
 ASSETS/**/*.webp filter=lfs diff=lfs merge=lfs -text
+
+# Tell GitHub Pages not to build these
+backend/ linguist-vendored
+sdk-js/ linguist-vendored
+sdk-python/ linguist-vendored
+node_modules/ linguist-vendored
+*.log linguist-vendored
+*.md linguist-documentation
 ASSETS/** filter=lfs diff=lfs merge=lfs -text
