@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Text Tools - Word Counter, Case Converter & More | Line Tech Tools</title>
+    <meta name="description" content="Free text tools: word counter, character counter, case converter, reverse text, remove spaces, and more. Perfect for writers, students, and content creators.">
+    <meta name="keywords" content="word counter, character counter, case converter, text tools, reverse text, remove spaces">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #ec4899; background: rgba(236, 72, 153, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #ec4899;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #ec4899;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #ec4899;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== TOOLS CONTAINER ===== */
+        .tools-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        @media (max-width: 768px) {
+            .tools-container { padding: 0 1rem; }
+        }
+
+        /* Tool Tabs */
+        .tool-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            color: #9ca3af;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            color: white;
+            border-color: transparent;
+        }
+        .tab-btn:hover:not(.active) {
+            border-color: #ec4899;
+            color: #ec4899;
+        }
+
+        /* Tool Content */
+        .tool-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+        .tool-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-area {
+            margin-bottom: 1.5rem;
+        }
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(236, 72, 153, 0.2);
+            border-radius: 16px;
+            color: white;
+            min-height: 180px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats {
+            background: rgba(31, 41, 55, 0.4);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(31, 41, 55, 0.3);
+            border-radius: 12px;
+        }
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            color: #ec4899;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .output-box {
+            background: rgba(31, 41, 55, 0.6);
+            color: #e5e7eb;
+            padding: 1rem;
+            border-radius: 16px;
+            min-height: 120px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            word-wrap: break-word;
+            font-family: monospace;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        h3 {
+            color: #ec4899;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(236, 72, 153, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.85rem; }
+        .footer-links a:hover { color: #ec4899; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(236, 72, 153, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-font"></i> Text Tools Suite</h1>
+        <p>Word counter, character counter, case converter, reverse text, remove spaces & more. All in one place.</p>
+    </div>
+
+    <div class="tools-container">
+        <div class="tool-tabs">
+            <button class="tab-btn active" onclick="switchTool('wordCounter')"><i class="fas fa-chart-bar"></i> Word Counter</button>
+            <button class="tab-btn" onclick="switchTool('caseConverter')"><i class="fas fa-text-height"></i> Case Converter</button>
+            <button class="tab-btn" onclick="switchTool('reverseText')"><i class="fas fa-undo-alt"></i> Reverse Text</button>
+            <button class="tab-btn" onclick="switchTool('textCleaner')"><i class="fas fa-broom"></i> Clean Text</button>
+        </div>
+
+        <!-- Word Counter Tool -->
+        <div id="wordCounter" class="tool-content active">
+            <div class="input-area">
+                <textarea id="counterInput" placeholder="Paste your text here to analyze..." oninput="updateStats()"></textarea>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-font"></i> Characters (with spaces)</span>
+                    <span class="stat-value" id="charCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-font"></i> Characters (no spaces)</span>
+                    <span class="stat-value" id="charNoSpace">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-file-alt"></i> Words</span>
+                    <span class="stat-value" id="wordCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-align-left"></i> Lines</span>
+                    <span class="stat-value" id="lineCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-paragraph"></i> Paragraphs</span>
+                    <span class="stat-value" id="paragraphCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fas fa-clock"></i> Est. Read Time</span>
+                    <span class="stat-value" id="readTime">0 min</span>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="copyTextContent('counterInput')"><i class="fas fa-copy"></i> Copy Text</button>
+        </div>
+
+        <!-- Case Converter Tool -->
+        <div id="caseConverter" class="tool-content">
+            <div class="input-area">
+                <textarea id="caseInput" placeholder="Enter text to convert case..." oninput="updateCasePreview()"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="applyCaseConversion('upper')"><i class="fas fa-arrow-up"></i> UPPERCASE</button>
+                <button class="btn-primary" onclick="applyCaseConversion('lower')"><i class="fas fa-arrow-down"></i> lowercase</button>
+                <button class="btn-primary" onclick="applyCaseConversion('title')"><i class="fas fa-heading"></i> Title Case</button>
+                <button class="btn-primary" onclick="applyCaseConversion('sentence')"><i class="fas fa-quote-left"></i> Sentence case</button>
+                <button class="btn-primary" onclick="applyCaseConversion('toggle')"><i class="fas fa-exchange-alt"></i> tOGGLE cASE</button>
+            </div>
+
+            <h3><i class="fas fa-eye"></i> Preview Result</h3>
+            <div class="output-box" id="casePreview">Enter text above to see preview...</div>
+            <button class="btn-primary btn-secondary" onclick="copyResult('casePreview')"><i class="fas fa-copy"></i> Copy Result</button>
+        </div>
+
+        <!-- Reverse Text Tool -->
+        <div id="reverseText" class="tool-content">
+            <div class="input-area">
+                <textarea id="reverseInput" placeholder="Enter text to reverse..." oninput="updateReversePreview()"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="reverseTextContent()"><i class="fas fa-undo-alt"></i> Reverse Text</button>
+                <button class="btn-primary" onclick="reverseWordsContent()"><i class="fas fa-exchange-alt"></i> Reverse Words</button>
+                <button class="btn-primary" onclick="reverseLinesContent()"><i class="fas fa-list"></i> Reverse Lines</button>
+            </div>
+
+            <h3><i class="fas fa-eye"></i> Result</h3>
+            <div class="output-box" id="reversePreview">Enter text above to see result...</div>
+            <button class="btn-primary btn-secondary" onclick="copyResult('reversePreview')"><i class="fas fa-copy"></i> Copy Result</button>
+        </div>
+
+        <!-- Text Cleaner Tool -->
+        <div id="textCleaner" class="tool-content">
+            <div class="input-area">
+                <textarea id="cleanerInput" placeholder="Paste text to clean..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="removeExtraSpaces()"><i class="fas fa-compress"></i> Remove Extra Spaces</button>
+                <button class="btn-primary" onclick="removeLineBreaks()"><i class="fas fa-stream"></i> Remove Line Breaks</button>
+                <button class="btn-primary" onclick="trimWhitespace()"><i class="fas fa-crop"></i> Trim Whitespace</button>
+                <button class="btn-primary" onclick="removeSpecialChars()"><i class="fas fa-filter"></i> Remove Special Chars</button>
+            </div>
+
+            <h3><i class="fas fa-eye"></i> Cleaned Result</h3>
+            <div class="output-box" id="cleanerResult">Select an action above to clean your text...</div>
+            <button class="btn-primary btn-secondary" onclick="copyResult('cleanerResult')"><i class="fas fa-copy"></i> Copy Result</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. Powerful text tools for everyone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 2500);
+        }
+
+        function copyToClipboard(text) {
+            if(!text || text === 'Enter text above to see preview...' || text === 'Select an action above to clean your text...') {
+                showNotification('Nothing to copy');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!');
+            });
+        }
+
+        function copyTextContent(elementId) {
+            const text = document.getElementById(elementId).value;
+            copyToClipboard(text);
+        }
+
+        function copyResult(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            copyToClipboard(text);
+        }
+
+        // Switch Tool
+        function switchTool(toolName) {
+            document.querySelectorAll('.tool-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(toolName).classList.add('active');
+            event.target.classList.add('active');
+            
+            gtag('event', 'tool_switched', {
+                'event_category': 'text_tools',
+                'event_label': toolName
+            });
+        }
+
+        // Word Counter
+        function updateStats() {
+            const text = document.getElementById('counterInput').value;
+            const chars = text.length;
+            const charsNoSpace = text.replace(/\s/g, '').length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const lines = text ? text.split('\n').length : 0;
+            const paragraphs = text ? text.split(/\n\s*\n/).filter(p => p.trim()).length : 0;
+            const readTime = Math.ceil(words / 200);
+
+            document.getElementById('charCount').textContent = chars.toLocaleString();
+            document.getElementById('charNoSpace').textContent = charsNoSpace.toLocaleString();
+            document.getElementById('wordCount').textContent = words.toLocaleString();
+            document.getElementById('lineCount').textContent = lines.toLocaleString();
+            document.getElementById('paragraphCount').textContent = paragraphs.toLocaleString();
+            document.getElementById('readTime').textContent = readTime + (readTime === 1 ? ' min' : ' mins');
+        }
+
+        // Case Converter
+        function updateCasePreview() {
+            const text = document.getElementById('caseInput').value;
+            document.getElementById('casePreview').textContent = text || 'Enter text above to see preview...';
+        }
+
+        function applyCaseConversion(type) {
+            const text = document.getElementById('caseInput').value;
+            if(!text) {
+                showNotification('Please enter some text first');
+                return;
+            }
+            let result = text;
+            switch(type) {
+                case 'upper': result = text.toUpperCase(); break;
+                case 'lower': result = text.toLowerCase(); break;
+                case 'title': result = text.replace(/\b\w/g, c => c.toUpperCase()); break;
+                case 'sentence': result = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(); break;
+                case 'toggle': result = text.replace(/\S/g, c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()); break;
+            }
+            document.getElementById('casePreview').textContent = result;
+        }
+
+        // Reverse Text
+        function updateReversePreview() {
+            const text = document.getElementById('reverseInput').value;
+            if(text) {
+                document.getElementById('reversePreview').textContent = text.split('').reverse().join('');
+            } else {
+                document.getElementById('reversePreview').textContent = 'Enter text above to see result...';
+            }
+        }
+
+        function reverseTextContent() {
+            const text = document.getElementById('reverseInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            document.getElementById('reversePreview').textContent = text.split('').reverse().join('');
+        }
+
+        function reverseWordsContent() {
+            const text = document.getElementById('reverseInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            document.getElementById('reversePreview').textContent = text.split(' ').reverse().join(' ');
+        }
+
+        function reverseLinesContent() {
+            const text = document.getElementById('reverseInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            document.getElementById('reversePreview').textContent = text.split('\n').reverse().join('\n');
+        }
+
+        // Text Cleaner
+        function removeExtraSpaces() {
+            const text = document.getElementById('cleanerInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            const result = text.replace(/\s+/g, ' ').trim();
+            document.getElementById('cleanerResult').textContent = result;
+        }
+
+        function removeLineBreaks() {
+            const text = document.getElementById('cleanerInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            const result = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            document.getElementById('cleanerResult').textContent = result;
+        }
+
+        function trimWhitespace() {
+            const text = document.getElementById('cleanerInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            document.getElementById('cleanerResult').textContent = text.trim();
+        }
+
+        function removeSpecialChars() {
+            const text = document.getElementById('cleanerInput').value;
+            if(!text) { showNotification('Please enter some text'); return; }
+            const result = text.replace(/[^\w\s\u00C0-\u017F]/g, '').replace(/\s+/g, ' ').trim();
+            document.getElementById('cleanerResult').textContent = result;
+        }
+
+        // Make functions globally accessible
+        window.switchTool = switchTool;
+        window.updateStats = updateStats;
+        window.applyCaseConversion = applyCaseConversion;
+        window.updateCasePreview = updateCasePreview;
+        window.updateReversePreview = updateReversePreview;
+        window.reverseTextContent = reverseTextContent;
+        window.reverseWordsContent = reverseWordsContent;
+        window.reverseLinesContent = reverseLinesContent;
+        window.removeExtraSpaces = removeExtraSpaces;
+        window.removeLineBreaks = removeLineBreaks;
+        window.trimWhitespace = trimWhitespace;
+        window.removeSpecialChars = removeSpecialChars;
+        window.copyTextContent = copyTextContent;
+        window.copyResult = copyResult;
+    </script>
+</body>
+</html>

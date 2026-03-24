@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Study Planner - Plan Revision Sessions | Line Tech Tools</title>
+    <meta name="description" content="Plan your study sessions by subject and day. Track your progress, visualize weekly schedule, and export your study plan. Perfect for students.">
+    <meta name="keywords" content="study planner, revision planner, study schedule, time management, student tools">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #f59e0b;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #f59e0b;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== PLANNER CONTAINER ===== */
+        .planner-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        @media (max-width: 768px) {
+            .planner-container { padding: 0 1rem; }
+        }
+
+        /* Input Grid */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        @media (max-width: 768px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+        input, select {
+            padding: 0.8rem 1rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            border-color: #f59e0b;
+            transform: translateY(-3px);
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Week Schedule */
+        .week-schedule {
+            margin-bottom: 2rem;
+        }
+        .week-schedule h2 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        @media (max-width: 768px) {
+            .week-grid { grid-template-columns: 1fr; }
+        }
+        .day-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+        .day-card:hover {
+            border-color: #f59e0b;
+        }
+        .day-header {
+            color: #fbbf24;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        .day-total {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-bottom: 0.75rem;
+        }
+        .session-item {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid #f59e0b;
+            padding: 0.6rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+        }
+        .session-subject {
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .session-duration {
+            color: #9ca3af;
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+        .session-progress {
+            margin-top: 0.5rem;
+            background: #1f2937;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .session-progress-bar {
+            background: #f59e0b;
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        /* Study List */
+        .study-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .study-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .study-list::-webkit-scrollbar-track {
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 10px;
+        }
+        .study-list::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+        .study-item {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .study-item:hover {
+            border-color: #f59e0b;
+        }
+        @media (max-width: 768px) {
+            .study-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+        .study-details {
+            flex: 1;
+        }
+        .study-subject {
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .study-meta {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .study-progress {
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            background: #1f2937;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        .btn-edit:hover {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.05);
+        }
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .action-buttons .add-btn {
+            flex: 1;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.85rem; }
+        .footer-links a:hover { color: #f59e0b; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(245, 158, 11, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-book"></i> Study Planner</h1>
+        <p>Plan revision sessions, track progress by subject, and stay focused on your academic goals.</p>
+    </div>
+
+    <div class="planner-container">
+        <div class="input-grid">
+            <input type="text" id="subject" placeholder="Subject (e.g., Mathematics)" required>
+            <input type="number" id="duration" placeholder="Minutes" min="15" step="15" required>
+            <select id="day">
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+            </select>
+            <button class="add-btn" onclick="addSession()"><i class="fas fa-plus"></i> Add Session</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="totalSessions">0</div>
+                <div class="stat-label">Total Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                <div class="stat-value" id="totalMinutes">0</div>
+                <div class="stat-label">Total Minutes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                <div class="stat-value" id="uniqueSubjects">0</div>
+                <div class="stat-label">Subjects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="avgSession">0</div>
+                <div class="stat-label">Avg per Session (min)</div>
+            </div>
+        </div>
+
+        <div class="week-schedule">
+            <h2><i class="fas fa-calendar-week"></i> Weekly Schedule</h2>
+            <div class="week-grid" id="weekGrid"></div>
+        </div>
+
+        <h2 style="color: #fbbf24; margin: 2rem 0 1rem;"><i class="fas fa-list-check"></i> All Study Sessions</h2>
+        <div class="study-list" id="studyList">
+            <div style="text-align: center; color: #9ca3af; padding: 2rem;">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                Add sessions above to plan your study week
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="add-btn" onclick="exportSchedule()" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-download"></i> Export as CSV</button>
+            <button class="add-btn" onclick="clearAllSessions()" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-trash-alt"></i> Clear All</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. Study smart, stay organized, achieve your goals.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Study Planner Logic
+        let sessions = [];
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 2500);
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('studySessions', JSON.stringify(sessions));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('studySessions');
+            if(saved) {
+                try {
+                    sessions = JSON.parse(saved);
+                } catch(e) { sessions = []; }
+            }
+            updateDisplay();
+        }
+
+        function addSession() {
+            const subject = document.getElementById('subject').value.trim();
+            const duration = parseInt(document.getElementById('duration').value);
+            const day = document.getElementById('day').value;
+            
+            if (!subject) {
+                showNotification('Please enter a subject');
+                return;
+            }
+            if (!duration || duration <= 0) {
+                showNotification('Please enter a valid duration');
+                return;
+            }
+            
+            sessions.push({
+                id: Date.now(),
+                subject: subject,
+                duration: duration,
+                day: day,
+                completed: 0
+            });
+            
+            document.getElementById('subject').value = '';
+            document.getElementById('duration').value = '';
+            saveToLocalStorage();
+            updateDisplay();
+            showNotification(`Added ${duration}min study session for ${subject}`);
+            
+            gtag('event', 'session_added', {
+                'event_category': 'study_planner',
+                'event_label': subject
+            });
+        }
+
+        function deleteSession(id) {
+            sessions = sessions.filter(s => s.id !== id);
+            saveToLocalStorage();
+            updateDisplay();
+            showNotification('Session removed');
+        }
+
+        function updateProgress(id, increment) {
+            const session = sessions.find(s => s.id === id);
+            if (session) {
+                session.completed = Math.min(session.completed + increment, session.duration);
+                saveToLocalStorage();
+                updateDisplay();
+                if(session.completed === session.duration) {
+                    showNotification(`🎉 Completed ${session.subject} session!`);
+                }
+            }
+        }
+
+        function formatTime(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            if(hours > 0) {
+                return `${hours}h ${mins}min`;
+            }
+            return `${mins}min`;
+        }
+
+        function updateDisplay() {
+            // Render all sessions list
+            const listHtml = sessions.length > 0 ?
+                sessions.map(s => {
+                    const percent = (s.completed / s.duration) * 100;
+                    return `
+                        <div class="study-item">
+                            <div class="study-details">
+                                <div class="study-subject"><i class="fas fa-graduation-cap"></i> ${escapeHtml(s.subject)}</div>
+                                <div class="study-meta">
+                                    <i class="fas fa-calendar-day"></i> ${s.day} • 
+                                    <i class="fas fa-hourglass-start"></i> ${s.duration} min • 
+                                    <i class="fas fa-check-circle"></i> Completed: ${s.completed} min
+                                </div>
+                                <div class="study-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${percent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn-small btn-edit" onclick="updateProgress(${s.id}, 10)"><i class="fas fa-plus"></i> +10</button>
+                                <button class="btn-small btn-edit" onclick="updateProgress(${s.id}, 30)"><i class="fas fa-plus"></i> +30</button>
+                                <button class="btn-small btn-delete" onclick="deleteSession(${s.id})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')
+                : '<div style="text-align: center; color: #9ca3af; padding: 2rem;"><i class="fas fa-graduation-cap" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>Add sessions above to plan your study week</div>';
+            
+            document.getElementById('studyList').innerHTML = listHtml;
+
+            // Calculate stats
+            const totalSessions = sessions.length;
+            const totalMinutes = sessions.reduce((sum, s) => sum + s.duration, 0);
+            const uniqueSubjects = new Set(sessions.map(s => s.subject)).size;
+            const avgSession = totalSessions > 0 ? Math.round(totalMinutes / totalSessions) : 0;
+            
+            document.getElementById('totalSessions').textContent = totalSessions;
+            document.getElementById('totalMinutes').textContent = totalMinutes;
+            document.getElementById('uniqueSubjects').textContent = uniqueSubjects;
+            document.getElementById('avgSession').textContent = avgSession;
+
+            // Render week grid
+            const weekGrid = days.map(day => {
+                const daySessions = sessions.filter(s => s.day === day);
+                const dayMinutes = daySessions.reduce((sum, s) => sum + s.duration, 0);
+                const completedMinutes = daySessions.reduce((sum, s) => sum + s.completed, 0);
+                const dayProgress = dayMinutes > 0 ? (completedMinutes / dayMinutes) * 100 : 0;
+                
+                const sessionsHtml = daySessions.map(s => {
+                    const percent = (s.completed / s.duration) * 100;
+                    return `
+                        <div class="session-item">
+                            <div class="session-subject">${escapeHtml(s.subject)}</div>
+                            <div class="session-duration">${s.duration} min</div>
+                            <div class="session-progress">
+                                <div class="session-progress-bar" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="day-card">
+                        <div class="day-header">${day}</div>
+                        <div class="day-total">
+                            <i class="fas fa-clock"></i> ${dayMinutes} min total
+                            ${dayMinutes > 0 ? `<br><span style="color: #fbbf24;">${Math.round(dayProgress)}% completed</span>` : ''}
+                        </div>
+                        ${sessionsHtml || '<div style="color: #6b7280; font-size: 0.85rem; text-align: center; padding: 0.5rem;">No sessions</div>'}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('weekGrid').innerHTML = weekGrid;
+        }
+
+        function escapeHtml(str) {
+            if(!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function exportSchedule() {
+            if(sessions.length === 0) {
+                showNotification('No sessions to export');
+                return;
+            }
+            
+            const data = sessions.map(s => ({
+                Subject: s.subject,
+                Day: s.day,
+                'Duration (min)': s.duration,
+                'Completed (min)': s.completed,
+                'Progress (%)': Math.round((s.completed / s.duration) * 100)
+            }));
+            
+            let csv = 'Subject,Day,Duration (min),Completed (min),Progress (%)\n';
+            data.forEach(row => {
+                csv += `"${row.Subject}","${row.Day}",${row['Duration (min)']},${row['Completed (min)']},${row['Progress (%)']}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `study-schedule-${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Study schedule exported');
+        }
+
+        function clearAllSessions() {
+            if(confirm('⚠️ Clear all study sessions? This action cannot be undone.')) {
+                sessions = [];
+                saveToLocalStorage();
+                updateDisplay();
+                showNotification('All sessions cleared');
+            }
+        }
+
+        // Initialize
+        loadFromLocalStorage();
+        
+        window.addSession = addSession;
+        window.deleteSession = deleteSession;
+        window.updateProgress = updateProgress;
+        window.exportSchedule = exportSchedule;
+        window.clearAllSessions = clearAllSessions;
+    </script>
+</body>
+</html>

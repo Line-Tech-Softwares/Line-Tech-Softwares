@@ -1,0 +1,838 @@
+/* Tools Page Styles - Enhanced & Mobile Responsive */
+
+/* Tool Hero for individual tool pages - reduced size */
+.tool-hero {
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    text-align: center;
+    margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .tool-hero {
+        padding: 2rem 1rem;
+        margin-top: 70px;
+    }
+}
+
+/* Back to Tools Button */
+.back-to-tools {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    z-index: 999;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-to-tools:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+}
+
+@media (min-width: 769px) {
+    .back-to-tools {
+        display: none;
+    }
+}
+
+/* Tools Hero */
+.tools-hero {
+    min-height: 40vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 80px;
+}
+
+.tools-hero::before {
+    content: '';
+    position: absolute;
+    background: radial-gradient(circle, rgba(0, 212, 200, 0.1) 0%, transparent 70%);
+    inset: 0;
+    z-index: 1;
+}
+
+.tools-hero .hero-content {
+    text-align: center;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 212, 200, 0.15);
+    border: 1px solid rgba(0, 212, 200, 0.4);
+    color: #00d4c8;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.tools-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff, #00d4c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tools-hero p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: #d1d5db;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Tools Main */
+.tools-main {
+    background: linear-gradient(180deg, #0a0a0a 0%, #111827 100%);
+    padding: 5rem 0;
+}
+
+/* Tools Section */
+.tools-section {
+    margin-bottom: 6rem;
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-header h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.section-header p {
+    color: #9ca3af;
+    font-size: 1.1rem;
+}
+
+/* Section Badge */
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 212, 200, 0.15);
+    border: 1px solid rgba(0, 212, 200, 0.4);
+    color: #00d4c8;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.section-badge.finance-badge {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #22c55e;
+}
+
+.section-badge.productivity-badge {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #3b82f6;
+}
+
+.section-badge.utility-badge {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.4);
+    color: #a855f7;
+}
+
+/* Tools Grid */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Tool Card */
+.tool-card {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(0, 212, 200, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00d4c8, #3b82f6);
+}
+
+.tool-card:hover {
+    border-color: #00d4c8;
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 212, 200, 0.2);
+}
+
+.tool-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 212, 200, 0.1);
+    border: 2px solid rgba(0, 212, 200, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #00d4c8;
+}
+
+.tool-icon.finance {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+.tool-icon.productivity {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+}
+
+.tool-icon.utility {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    color: #a855f7;
+}
+
+.tool-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.tool-card p {
+    color: #9ca3af;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    flex-grow: 1;
+}
+
+.tool-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+/* Badge Styles */
+.badge {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge.preview {
+    background: rgba(0, 212, 200, 0.2);
+    color: #00d4c8;
+    border: 1px solid rgba(0, 212, 200, 0.4);
+}
+
+.badge.pdf {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.badge.export {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge.calc {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.badge.util,
+.badge.csv {
+    background: rgba(168, 85, 247, 0.2);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+/* Tool Button */
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #00d4c8, #00b8a9);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.tool-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 212, 200, 0.4);
+}
+
+/* CTA Section */
+.tools-cta-section {
+    margin-top: 6rem;
+    padding: 3rem 0;
+}
+
+.cta-card {
+    background: linear-gradient(135deg, rgba(0, 212, 200, 0.15), rgba(59, 130, 246, 0.15));
+    border: 1px solid rgba(0, 212, 200, 0.2);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    backdrop-filter: blur(12px);
+}
+
+.cta-icon {
+    font-size: 3rem;
+    color: #00d4c8;
+    margin-bottom: 1rem;
+}
+
+.cta-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.cta-card p {
+    color: #9ca3af;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.cta-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+}
+
+/* Original CTA Styles */
+.tools-cta {
+    background: linear-gradient(135deg, rgba(0, 212, 200, 0.15), rgba(59, 130, 246, 0.15));
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.tools-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.tools-cta p {
+    color: #9ca3af;
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.cta-btn {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    padding: 1.25rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer styles */
+.footer {
+    background: #0a0a0a;
+    color: #9ca3af;
+}
+
+.footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1rem 1.5rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #00d4c8;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+    color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .tools-hero {
+        min-height: 50vh;
+        margin-top: 70px;
+    }
+
+    .tools-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .tools-hero p {
+        font-size: 1rem;
+    }
+
+    .tools-main {
+        padding: 3rem 0;
+    }
+
+    .tools-section {
+        margin-bottom: 4rem;
+    }
+
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .tool-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .tool-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+    }
+
+    .tool-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .tool-card p {
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .tool-meta {
+        margin-bottom: 1.5rem;
+        gap: 0.5rem;
+    }
+
+    .badge {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.7rem;
+    }
+
+    .tool-btn {
+        padding: 0.9rem 2rem;
+        font-size: 0.95rem;
+    }
+
+    .cta-card {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .cta-icon {
+        font-size: 2.5rem;
+    }
+
+    .cta-card h3 {
+        font-size: 1.75rem;
+    }
+
+    .cta-card p {
+        font-size: 1rem;
+    }
+
+    .footer-content {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tools-hero {
+        min-height: 40vh;
+        margin-top: 60px;
+    }
+
+    .tools-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .tools-hero p {
+        font-size: 0.9rem;
+    }
+
+    .hero-badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .tools-main {
+        padding: 2rem 0;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .tool-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .tool-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .tool-card p {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .tools-cta {
+        padding: 3rem 0;
+    }
+
+    .tools-cta h2 {
+        font-size: 1.75rem;
+    }
+
+    .tools-cta p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00d4c8, #3b82f6);
+}
+
+.tool-card:hover {
+    border-color: #00d4c8;
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 212, 200, 0.2);
+}
+
+.tool-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 212, 200, 0.1);
+    border: 2px solid rgba(0, 212, 200, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #00d4c8;
+}
+
+.tool-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.tool-card p {
+    color: #9ca3af;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.tool-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge.free {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.badge.pdf {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #00d4c8, #00b8a9);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.tool-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 212, 200, 0.4);
+}
+
+/* Section Upcoming */
+.section-badge.upcoming {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* CTA */
+.tools-cta {
+    background: linear-gradient(135deg, rgba(0, 212, 200, 0.15), rgba(59, 130, 246, 0.15));
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.tools-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.tools-cta p {
+    color: #9ca3af;
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.cta-btn {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    padding: 1.25rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .tool-card {
+        padding: 2rem 1.5rem;
+    }
+    .tools-main {
+        padding: 3rem 0;
+    }
+}
+
+/* Footer styles (reuse from index.css) */
+.footer {
+    background: #0a0a0a;
+    color: #9ca3af;
+}
+
+.footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1rem 1.5rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links a {
+    color: #9ca3af;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #00d4c8;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+    color: #6b7280;
+}

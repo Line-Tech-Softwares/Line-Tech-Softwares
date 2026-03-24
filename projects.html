@@ -279,34 +279,43 @@
         </div>
     </div>
 
-    <!-- Number Maze Game -->
-    <div class="project-card">
-        <div class="project-image">
-            <img id="mazeImg" src="https://images.unsplash.com/photo-1570303008274-b4f59b296f8c?w=500&h=500&fit=crop" alt="Number Maze Game" onerror="this.src='https://images.unsplash.com/photo-1570303008274-b4f59b296f8c?w=500&h=500&fit=crop'">
-            <div class="project-overlay">
-                <a href="./number_maze.html" class="project-view-btn">View Game</a>
-            </div>
-             <script>
+  <!-- Number Maze Game -->
+<div class="project-card">
+    <div class="project-image">
+        <img id="mazeImg" src="https://images.unsplash.com/photo-1570303008274-b4f59b296f8c?w=500&h=500&fit=crop" alt="Number Maze Game" onerror="this.src='https://images.unsplash.com/photo-1570303008274-b4f59b296f8c?w=500&h=500&fit=crop'">
+        <div class="project-overlay">
+            <a href="./number_maze.html" class="project-view-btn">View Game</a>
+        </div>
+        <script>
             document.getElementById('mazeImg').onerror = function() {
                 var svg = '<svg class="app-placeholder" viewBox="0 0 200 200" style="max-width: 300px; height: 300px; background: #1a1b23; border-radius: 20px;" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#1a1b23"/><text x="40" y="100" font-size="20" fill="#00D4C8" font-weight="bold">Number Maze</text><text x="50" y="130" font-size="13" fill="#cbd5e1">Puzzle Game</text><circle cx="40" cy="50" r="5" fill="#00D4C8" opacity="0.5"/><circle cx="160" cy="50" r="5" fill="#00D4C8" opacity="0.5"/><circle cx="40" cy="150" r="5" fill="#00D4C8" opacity="0.5"/><circle cx="160" cy="150" r="5" fill="#00D4C8" opacity="0.5"/></svg>';
                 this.parentElement.innerHTML = svg;
             };
         </script>
-        </div>
-        <div class="project-content">
+    </div>
+    <div class="project-content">
+        <a href="./number_maze.html" class="project-title-link" style="text-decoration: none;">
             <h3 class="project-title">Number Maze Game</h3>
-            <p class="project-description">A challenging number puzzle game that tests your logic and problem-solving skills with engaging gameplay.</p>
-            <div class="project-meta">
-                <span class="status-badge available">
-                    <i class="fas fa-circle"></i> Available
-                </span>
-                <span class="platform-badge">
-                    <i class="fas fa-mobile-alt"></i> Mobile
-                </span>
-            </div>
+        </a>
+        <p class="project-description">A challenging number puzzle game that tests your logic and problem-solving skills with engaging gameplay.</p>
+        <div class="project-meta">
+            <span class="status-badge available">
+                <i class="fas fa-circle"></i> Available
+            </span>
+            <span class="platform-badge">
+                <i class="fas fa-mobile-alt"></i> Mobile
+            </span>
         </div>
     </div>
 </div>
+</div>
+
+
+
+<!-- Floating Tools Button -->
+<a href="./tools/tools.html" class="floating-tools-btn" style="position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(59,130,246,0.3); z-index: 1000; display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-tools"></i> Free Tools
+</a>
 
             <!-- Coming Soon Section -->
             <div style="margin-top: 5rem;">

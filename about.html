@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>About Line Tech - Innovative Software Solutions | Line Tech Softwares</title>
+    <meta name="description" content="Learn about Line Tech Softwares - a cutting-edge software company specializing in web development, mobile apps, and innovative digital solutions.">
+    <meta name="keywords" content="Line Tech, software company, web development, mobile apps, digital solutions, South Africa">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-img:hover { border-color: #3b82f6; transform: scale(1.05); }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(5) { animation-delay: 0.5s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+        .nav-mobile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBackground 3s ease-in-out infinite;
+        }
+        @keyframes pulseBackground {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-link-mobile { font-size: 1.3rem; min-width: 180px; padding: 0.75rem 1.5rem; }
+        }
+
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        .back-to-home:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateX(-5px);
+            border-color: #3b82f6;
+        }
+        @media (max-width: 768px) {
+            .back-to-home { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+        }
+        .hero-section h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .hero-section p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            padding: 3rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .content-section h2 {
+            font-size: 1.8rem;
+            color: #22c55e;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid rgba(34, 197, 94, 0.3);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .content-section p {
+            margin-bottom: 1.5rem;
+            color: #e5e7eb;
+        }
+        .highlight {
+            background: rgba(34, 197, 94, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            border-left: 4px solid #22c55e;
+            margin: 1.5rem 0;
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer p {
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="./index.html" class="logo">
+                    <img src="./ASSETS/Line-Tech-Logo-2.ico" alt="Line Tech Logo" class="logo-img">
+                    <span class="logo-text">Line Tech</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="./index.html" class="nav-link">Home</a>
+                    <a href="./projects.html" class="nav-link">Projects</a>
+                    <a href="./tools.html" class="nav-link">Tools</a>
+                    <a href="./about.html" class="nav-link active">About</a>
+                    <a href="./index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="./index.html" class="nav-link-mobile">Home</a>
+                <a href="./projects.html" class="nav-link-mobile">Projects</a>
+                <a href="./tools.html" class="nav-link-mobile">Tools</a>
+                <a href="./about.html" class="nav-link-mobile active">About</a>
+                <a href="./index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <a href="./index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="hero-section">
+        <h1><i class="fas fa-info-circle"></i> About Line Tech</h1>
+        <p>Discover our mission, vision, and the innovative solutions we bring to the digital world.</p>
+    </div>
+
+    <div class="content-section">
+        <h2><i class="fas fa-rocket"></i> Our Mission</h2>
+        <p>At Line Tech Softwares, our mission is to empower businesses and individuals with cutting-edge software solutions that drive innovation, efficiency, and growth. We believe in the power of technology to transform ideas into reality.</p>
+
+        <h2><i class="fas fa-eye"></i> Our Vision</h2>
+        <p>To be the leading software development company in South Africa, recognized for our commitment to excellence, creativity, and delivering solutions that make a real difference in people's lives and businesses.</p>
+
+        <h2><i class="fas fa-users"></i> Who We Are</h2>
+        <p>Line Tech Softwares is a dynamic software development company based in South Africa. Founded with a passion for technology and innovation, we specialize in creating web applications, mobile apps, and custom software solutions that meet the unique needs of our clients.</p>
+
+        <div class="highlight">
+            <h3><i class="fas fa-lightbulb"></i> Our Philosophy</h3>
+            <p>"Plug into Possibility" - This is more than just our tagline; it's our approach to every project. We see potential where others see problems, and we turn challenges into opportunities for growth and success.</p>
+        </div>
+
+        <h2><i class="fas fa-code"></i> What We Do</h2>
+        <p>We develop comprehensive software solutions including:</p>
+        <ul style="color: #e5e7eb; margin-left: 2rem;">
+            <li>Web Applications</li>
+            <li>Mobile Applications</li>
+            <li>E-commerce Platforms</li>
+            <li>Custom Software Development</li>
+            <li>API Development and Integration</li>
+            <li>Database Design and Management</li>
+        </ul>
+
+        <h2><i class="fas fa-handshake"></i> Our Values</h2>
+        <p>Integrity, Innovation, Excellence, and Customer Satisfaction are at the core of everything we do. We pride ourselves on delivering high-quality solutions that exceed expectations and build lasting relationships with our clients.</p>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Line Tech Softwares. Plug into Possibility.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        const body = document.body;
+
+        if (hamburger && mobileNav) {
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+            });
+
+            const mobileLinks = mobileNav.querySelectorAll('.nav-link-mobile');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                });
+            });
+
+            mobileNav.addEventListener('click', function(e) {
+                if (e.target === mobileNav) {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                }
+            });
+        }
+
+        // Header scroll effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

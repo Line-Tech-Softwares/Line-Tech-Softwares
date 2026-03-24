@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Expense Tracker - Track Spending by Category | Line Tech Tools</title>
+    <meta name="description" content="Track your expenses by category. Visualize spending patterns, get insights, and export reports. Perfect for personal budgeting in South Africa.">
+    <meta name="keywords" content="expense tracker, budget tracker, spending tracker, personal finance, money management">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+            position: relative;
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .tracker-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        @media (max-width: 768px) {
+            .tracker-container { padding: 0 1rem; }
+        }
+
+        /* Input Grid */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        @media (max-width: 768px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+        input, select {
+            padding: 0.8rem 1rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Dashboard Stats */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Expense List */
+        .expense-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .expense-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .expense-list::-webkit-scrollbar-track {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+        }
+        .expense-list::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        .expense-item {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .expense-item:hover {
+            border-color: #3b82f6;
+        }
+        @media (max-width: 768px) {
+            .expense-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.8rem;
+            }
+        }
+        .expense-details {
+            flex: 1;
+        }
+        .expense-description {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+        .expense-category {
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        .expense-date {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        .expense-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ef4444;
+        }
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .delete-btn:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Category Breakdown */
+        .category-breakdown {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .category-breakdown h3 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .category-item:last-child {
+            border-bottom: none;
+        }
+        .category-name {
+            color: #d1d5db;
+            font-weight: 500;
+        }
+        .category-amount {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+        .category-percent {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .action-buttons .add-btn {
+            flex: 1;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.85rem; }
+        .footer-links a:hover { color: #3b82f6; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-credit-card"></i> Expense Tracker</h1>
+        <p>Track spending by category, analyze patterns, and manage your budget better. All data saved locally.</p>
+    </div>
+
+    <div class="tracker-container">
+        <div class="input-grid">
+            <input type="text" id="description" placeholder="What did you spend on?" required>
+            <input type="number" id="amount" placeholder="Amount (R)" step="0.01" required>
+            <select id="category">
+                <option value="Food">🍔 Food</option>
+                <option value="Transport">🚗 Transport</option>
+                <option value="Utilities">💡 Utilities</option>
+                <option value="Entertainment">🎬 Entertainment</option>
+                <option value="Shopping">🛍️ Shopping</option>
+                <option value="Health">🏥 Health</option>
+                <option value="Education">📚 Education</option>
+                <option value="Housing">🏠 Housing</option>
+                <option value="Other">📦 Other</option>
+            </select>
+            <button class="add-btn" onclick="addExpense()"><i class="fas fa-plus"></i> Add Expense</button>
+        </div>
+
+        <div class="dashboard">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="totalExpense">R 0.00</div>
+                <div class="stat-label">Total Expenses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calculator"></i></div>
+                <div class="stat-value" id="avgExpense">R 0.00</div>
+                <div class="stat-label">Average Per Entry</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="stat-value" id="maxExpense">R 0.00</div>
+                <div class="stat-label">Largest Expense</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+                <div class="stat-value" id="count">0</div>
+                <div class="stat-label">Total Entries</div>
+            </div>
+        </div>
+
+        <div class="expense-list" id="expenseList">
+            <div style="text-align: center; color: #9ca3af; padding: 2rem;">
+                <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                Add expenses above to start tracking
+            </div>
+        </div>
+
+        <div class="category-breakdown">
+            <h3><i class="fas fa-chart-pie"></i> Spending by Category</h3>
+            <div id="categoryBreakdown"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="add-btn" onclick="exportExpenses()" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-download"></i> Export CSV</button>
+            <button class="add-btn" onclick="clearAllExpenses()" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-trash-alt"></i> Clear All</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. Track your finances wisely.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Load saved expenses
+        let expenses = [];
+
+        function loadExpenses() {
+            const saved = localStorage.getItem('expenses');
+            if(saved) {
+                try {
+                    expenses = JSON.parse(saved);
+                } catch(e) { expenses = []; }
+            }
+            updateDisplay();
+        }
+
+        function saveExpenses() {
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 2500);
+        }
+
+        function addExpense() {
+            const description = document.getElementById('description').value.trim();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+            
+            if (!description) {
+                showNotification('Please enter a description');
+                return;
+            }
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount');
+                return;
+            }
+            
+            expenses.unshift({
+                id: Date.now(),
+                description,
+                amount,
+                category,
+                date: new Date().toLocaleDateString('en-ZA')
+            });
+            
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+            saveExpenses();
+            updateDisplay();
+            showNotification('Expense added: R' + amount.toFixed(2));
+        }
+
+        function deleteExpense(id) {
+            expenses = expenses.filter(e => e.id !== id);
+            saveExpenses();
+            updateDisplay();
+            showNotification('Expense removed');
+        }
+
+        function formatCurrency(amount) {
+            return 'R ' + amount.toFixed(2);
+        }
+
+        function updateDisplay() {
+            // Render expense list
+            const listHtml = expenses.length > 0 ?
+                expenses.map(e => `
+                    <div class="expense-item">
+                        <div class="expense-details">
+                            <div class="expense-description">${escapeHtml(e.description)}</div>
+                            <div class="expense-category"><i class="fas fa-tag"></i> ${e.category}</div>
+                            <div class="expense-date"><i class="far fa-calendar-alt"></i> ${e.date}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="expense-amount">- ${formatCurrency(e.amount)}</div>
+                            <button class="delete-btn" onclick="deleteExpense(${e.id})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `).join('')
+                : '<div style="text-align: center; color: #9ca3af; padding: 2rem;"><i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>No expenses added yet</div>';
+            
+            document.getElementById('expenseList').innerHTML = listHtml;
+
+            // Calculate stats
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const avg = expenses.length > 0 ? total / expenses.length : 0;
+            const max = expenses.length > 0 ? Math.max(...expenses.map(e => e.amount)) : 0;
+            
+            document.getElementById('totalExpense').textContent = formatCurrency(total);
+            document.getElementById('avgExpense').textContent = formatCurrency(avg);
+            document.getElementById('maxExpense').textContent = formatCurrency(max);
+            document.getElementById('count').textContent = expenses.length;
+
+            // Category breakdown
+            const categories = {};
+            expenses.forEach(e => {
+                if (!categories[e.category]) categories[e.category] = 0;
+                categories[e.category] += e.amount;
+            });
+            
+            const categoryHtml = Object.entries(categories)
+                .sort((a,b) => b[1] - a[1])
+                .map(([cat, amount]) => {
+                    const percent = total > 0 ? (amount / total * 100).toFixed(1) : 0;
+                    return `
+                        <div class="category-item">
+                            <span class="category-name">${cat}</span>
+                            <span>
+                                <span class="category-amount">${formatCurrency(amount)}</span>
+                                <span class="category-percent">(${percent}%)</span>
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+            
+            document.getElementById('categoryBreakdown').innerHTML = categoryHtml ||
+                '<div style="color: #9ca3af; text-align: center;">No data yet</div>';
+        }
+
+        function escapeHtml(str) {
+            if(!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function exportExpenses() {
+            if(expenses.length === 0) {
+                showNotification('No expenses to export');
+                return;
+            }
+            
+            const data = expenses.map(e => ({
+                Date: e.date,
+                Description: e.description,
+                Category: e.category,
+                Amount: e.amount
+            }));
+            
+            let csv = 'Date,Description,Category,Amount\n';
+            data.forEach(row => {
+                csv += `"${row.Date}","${row.Description}","${row.Category}",${row.Amount}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `expenses-${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Expenses exported to CSV');
+        }
+
+        function clearAllExpenses() {
+            if(confirm('⚠️ Clear all expenses? This action cannot be undone.')) {
+                expenses = [];
+                saveExpenses();
+                updateDisplay();
+                showNotification('All expenses cleared');
+            }
+        }
+
+        // Initialize
+        loadExpenses();
+        
+        // Make functions global
+        window.addExpense = addExpense;
+        window.deleteExpense = deleteExpense;
+        window.exportExpenses = exportExpenses;
+        window.clearAllExpenses = clearAllExpenses;
+    </script>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Barcode Generator - Create Professional Barcodes | Line Tech Tools</title>
+    <meta name="description" content="Generate professional barcodes in multiple formats: CODE128, EAN13, UPC, CODE39. Perfect for products, inventory, and business use. Free and instant.">
+    <meta name="keywords" content="barcode generator, free barcode maker, CODE128, EAN13 generator, UPC barcode, inventory barcode">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- JsBarcode Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-img:hover { border-color: #3b82f6; transform: scale(1.05); }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        /* ===== DESKTOP NAVIGATION ===== */
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU STYLES ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(5) { animation-delay: 0.5s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+        .nav-mobile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBackground 3s ease-in-out infinite;
+        }
+        @keyframes pulseBackground {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-link-mobile { font-size: 1.3rem; min-width: 180px; padding: 0.75rem 1.5rem; }
+        }
+
+        /* ===== BACK TO TOOLS BUTTON ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 7rem 0 0 2rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        .back-to-tools:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateX(-5px);
+            border-color: #3b82f6;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 6rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== TOOL HERO ===== */
+        .tool-hero {
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+            padding: 2rem 0 1.5rem;
+            text-align: center;
+            margin-top: 0;
+        }
+        .tool-hero h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .tool-hero p {
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== MAIN GENERATOR CONTAINER ===== */
+        .generator-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Input Section */
+        .input-section h3, .preview-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .range-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .range-control input {
+            flex: 1;
+        }
+        .range-value {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .input-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            transform: scale(1.1);
+            accent-color: #3b82f6;
+        }
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .barcode-canvas {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .download-btn {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+            color: #10b981;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .download-btn:hover {
+            background: #10b981;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-banner-content h2 { font-size: 1rem; margin-bottom: 0.2rem; }
+        #cookie-banner-content p { font-size: 0.75rem; opacity: 0.8; }
+        #cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer p {
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+
+        /* Utility */
+        .app-header { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </div>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <!-- Back to Tools -->
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <!-- Tool Hero -->
+    <section class="tool-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1><i class="fas fa-barcode"></i> Barcode Generator</h1>
+                <p>Generate professional barcodes in multiple formats. Perfect for products, inventory & business use.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="generator-container">
+        <div class="content-wrapper">
+            <div class="input-section">
+                <h3><i class="fas fa-cogs"></i> Configuration</h3>
+                
+                <div class="input-group">
+                    <label for="textInput">Barcode Text / Number</label>
+                    <input type="text" id="textInput" placeholder="Enter text or product code (e.g., 123456789)" value="5901234123457" oninput="generateBarcode()">
+                    <small style="color: #9ca3af; display: block; margin-top: 0.3rem;">Use numbers for EAN/UPC, or any text for CODE128</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="formatSelect">Barcode Format</label>
+                    <select id="formatSelect" onchange="generateBarcode()">
+                        <option value="CODE128">CODE128 (Recommended)</option>
+                        <option value="CODE39">CODE39</option>
+                        <option value="CODE93">CODE93</option>
+                        <option value="EAN13">EAN13 (13 digits)</option>
+                        <option value="EAN8">EAN8 (8 digits)</option>
+                        <option value="UPC">UPC (12 digits)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Width (pixels)</label>
+                    <div class="range-control">
+                        <input type="range" id="widthSlider" min="1" max="6" value="2" step="0.5" onchange="generateBarcode()">
+                        <span class="range-value" id="widthValue">2.0</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Height (pixels)</label>
+                    <div class="range-control">
+                        <input type="range" id="heightSlider" min="40" max="150" value="80" step="5" onchange="generateBarcode()">
+                        <span class="range-value" id="heightValue">80</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="displayValue" checked onchange="generateBarcode()"> Display text below barcode
+                    </label>
+                </div>
+
+                <button class="generate-btn" onclick="generateBarcode()"><i class="fas fa-sync-alt"></i> Regenerate Barcode</button>
+            </div>
+
+            <div class="preview-section">
+                <h3><i class="fas fa-eye"></i> Live Preview</h3>
+                <svg id="barcodeCanvas" class="barcode-canvas"></svg>
+                <button class="download-btn" id="downloadBtn" onclick="downloadBarcode()"><i class="fas fa-download"></i> Download as PNG</button>
+                <span class="badge" id="formatBadge">CODE128</span>
+                <p style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">Right-click the barcode to save as SVG</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Line Tech Softwares. Generate professional barcodes instantly.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Menu Functionality
+        (function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileNav = document.getElementById('nav-mobile');
+            const body = document.body;
+            
+            if (hamburger && mobileNav) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hamburger.classList.toggle('active');
+                    mobileNav.classList.toggle('active');
+                    body.classList.toggle('no-scroll');
+                });
+                
+                const mobileLinks = mobileNav.querySelectorAll('.nav-link-mobile');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    });
+                });
+                
+                mobileNav.addEventListener('click', function(e) {
+                    if (e.target === mobileNav) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+            }
+        })();
+
+        // Cookie Banner
+        (function() {
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept');
+            if (!localStorage.getItem('cookieAccepted')) {
+                cookieBanner.style.display = 'flex';
+            }
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                    localStorage.setItem('cookieAccepted', 'true');
+                    cookieBanner.style.display = 'none';
+                });
+            }
+        })();
+
+        // Header Scroll Effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Barcode Generator Logic
+        let lastFormat = 'CODE128';
+        let lastValidText = '5901234123457';
+
+        function generateBarcode() {
+            const text = document.getElementById('textInput').value.trim();
+            const format = document.getElementById('formatSelect').value;
+            let width = parseFloat(document.getElementById('widthSlider').value);
+            const height = parseInt(document.getElementById('heightSlider').value);
+            const displayValue = document.getElementById('displayValue').checked;
+            
+            document.getElementById('widthValue').textContent = width;
+            document.getElementById('heightValue').textContent = height;
+            document.getElementById('formatBadge').textContent = format;
+
+            if (!text) {
+                document.getElementById('barcodeCanvas').innerHTML = '<text x="10" y="40" fill="white">Enter text to generate barcode</text>';
+                return;
+            }
+
+            let validText = text;
+            const errors = validateBarcodeFormat(text, format);
+            
+            if (errors.length > 0) {
+                console.warn('Format warnings:', errors);
+                // For EAN/UPC formats, try to pad or adjust
+                if (format === 'EAN13' && text.length < 13 && /^\d+$/.test(text)) {
+                    validText = text.padEnd(13, '0');
+                } else if (format === 'EAN8' && text.length < 8 && /^\d+$/.test(text)) {
+                    validText = text.padEnd(8, '0');
+                } else if (format === 'UPC' && text.length < 12 && /^\d+$/.test(text)) {
+                    validText = text.padEnd(12, '0');
+                } else if (errors.length > 0) {
+                    // Show warning but still attempt to generate
+                    const warningDiv = document.createElement('div');
+                    // Use alert only for critical mismatches
+                    if ((format === 'EAN13' && text.length !== 13 && text.length > 0) ||
+                        (format === 'EAN8' && text.length !== 8) ||
+                        (format === 'UPC' && text.length !== 12)) {
+                        // Don't alert repeatedly, just log
+                    }
+                }
+            }
+
+            try {
+                JsBarcode('#barcodeCanvas', validText, {
+                    format: format,
+                    width: width,
+                    height: height,
+                    displayValue: displayValue,
+                    fontSize: 14,
+                    margin: 10,
+                    background: '#ffffff',
+                    lineColor: '#000000'
+                });
+                lastFormat = format;
+                lastValidText = validText;
+            } catch (e) {
+                console.error('Barcode generation error:', e);
+                document.getElementById('barcodeCanvas').innerHTML = '<text x="10" y="40" fill="#ef4444">Invalid input for ' + format + ' format</text>';
+            }
+        }
+
+        function validateBarcodeFormat(text, format) {
+            const errors = [];
+            const cleanText = text.replace(/\s/g, '');
+            
+            if (format === 'EAN13' && cleanText.length !== 13) {
+                errors.push('EAN13 requires exactly 13 digits');
+            }
+            if (format === 'EAN8' && cleanText.length !== 8) {
+                errors.push('EAN8 requires exactly 8 digits');
+            }
+            if (format === 'UPC' && cleanText.length !== 12) {
+                errors.push('UPC requires exactly 12 digits');
+            }
+            if ((format === 'EAN13' || format === 'EAN8' || format === 'UPC') && !/^\d+$/.test(cleanText)) {
+                errors.push(format + ' requires numbers only');
+            }
+            if (cleanText.length > 100) {
+                errors.push('Text is too long (max 100 characters)');
+            }
+            
+            return errors;
+        }
+
+        function downloadBarcode() {
+            const text = document.getElementById('textInput').value;
+            if (!text) {
+                alert('Please enter text for the barcode first');
+                return;
+            }
+
+            const svg = document.querySelector('#barcodeCanvas');
+            if (!svg || svg.children.length === 0) {
+                alert('Barcode not generated yet');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const canvas = document.createElement('canvas');
+                const img = new Image();
+                
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const link = document.createElement('a');
+                    link.download = `barcode-${text.replace(/[^a-z0-9]/gi, '_')}-${lastFormat}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                };
+                
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            } catch (e) {
+                alert('Could not download barcode. Please try again.');
+            }
+        }
+
+        // Initialize barcode on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateBarcode();
+        });
+    </script>
+      <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+    </script>
+</body>
+</html>

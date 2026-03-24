@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Salary Calculator SA - Net Salary with Tax | Line Tech Tools</title>
+    <meta name="description" content="Calculate your South African net salary with PAYE tax, UIF, and deductions. 2024/2025 SARS tax rates. Includes medical aid, pension, and student loan deductions.">
+    <meta name="keywords" content="salary calculator south africa, net salary calculator, paye tax, uif calculator, sars tax rates 2024">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== TOOL WRAPPER ===== */
+        .tool-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        @media (max-width: 900px) {
+            .tool-wrapper {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 0 1rem;
+            }
+        }
+
+        /* Form Section */
+        .form-section {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+        .form-section h2, .form-section h3 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-section h3 {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .input-hint {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        /* Preview Section */
+        #preview {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+        #preview h2 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            padding-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        .preview-card {
+            background: rgba(31, 41, 55, 0.4);
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .calc-row:last-child {
+            border-bottom: none;
+        }
+        .calc-row.total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-top: 2px solid rgba(59, 130, 246, 0.4);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+        }
+        .calc-label {
+            color: #9ca3af;
+        }
+        .calc-value {
+            font-weight: 600;
+        }
+        .calc-value.negative {
+            color: #ef4444;
+        }
+        .calc-value.positive {
+            color: #22c55e;
+        }
+        .calc-value.primary {
+            color: #3b82f6;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.85rem; }
+        .footer-links a:hover { color: #3b82f6; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-calculator"></i> South Africa Salary Calculator</h1>
+        <p>Calculate your net salary with PAYE tax, UIF, and deductions. Based on 2024/2025 SARS tax rates.</p>
+    </div>
+
+    <div class="tool-wrapper">
+        <div class="form-section">
+            <h2><i class="fas fa-edit"></i> Salary Details</h2>
+            
+            <div class="form-group">
+                <label>Gross Annual Salary (ZAR)</label>
+                <input type="number" id="grossSalary" placeholder="e.g., 350000" step="1000" value="350000" oninput="calculateSalary()">
+                <div class="input-hint">Enter your annual salary before deductions</div>
+            </div>
+
+            <div class="form-group">
+                <label>Tax Threshold / Exemption (ZAR)</label>
+                <input type="number" id="taxThreshold" placeholder="87300" step="1000" value="87300" oninput="calculateSalary()">
+                <div class="input-hint">Standard tax threshold for 2024 is R87,300</div>
+            </div>
+
+            <h3><i class="fas fa-plus-circle"></i> Additional Deductions (Monthly)</h3>
+
+            <div class="form-group">
+                <label>Medical Aid Contribution</label>
+                <input type="number" id="medicalAid" placeholder="0.00" step="100" oninput="calculateSalary()">
+                <div class="input-hint">Approved medical aid contributions (tax deductible)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Pension / Provident Fund</label>
+                <input type="number" id="pension" placeholder="0.00" step="100" oninput="calculateSalary()">
+                <div class="input-hint">Retirement fund contributions (tax deductible up to limit)</div>
+            </div>
+
+            <div class="form-group">
+                <label>Student Loan (NSFAS)</label>
+                <input type="number" id="studentLoan" placeholder="0.00" step="100" oninput="calculateSalary()">
+                <div class="input-hint">Monthly NSFAS repayment</div>
+            </div>
+
+            <div class="form-group">
+                <label>Union Fees</label>
+                <input type="number" id="unionFees" placeholder="0.00" step="50" oninput="calculateSalary()">
+                <div class="input-hint">Monthly union membership fees</div>
+            </div>
+        </div>
+
+        <div id="preview">
+            <h2><i class="fas fa-chart-line"></i> Salary Breakdown</h2>
+            
+            <div class="preview-card">
+                <div class="calc-row">
+                    <span class="calc-label">Gross Annual Salary:</span>
+                    <span class="calc-value primary" id="displayGross">R 0.00</span>
+                </div>
+                <div class="calc-row">
+                    <span class="calc-label">Monthly Gross:</span>
+                    <span class="calc-value primary" id="displayMonthly">R 0.00</span>
+                </div>
+            </div>
+
+            <h3 style="color: #ef4444; margin-bottom: 0.5rem; font-size: 1rem;">Deductions</h3>
+            <div class="calc-row">
+                <span class="calc-label">PAYE Tax:</span>
+                <span class="calc-value negative" id="payeTax">-R 0.00</span>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label">UIF (1% employee):</span>
+                <span class="calc-value negative" id="uif">-R 0.00</span>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label">Medical Aid (tax deductible):</span>
+                <span class="calc-value negative" id="medDeduct">-R 0.00</span>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label">Pension / Provident:</span>
+                <span class="calc-value negative" id="pensionDeduct">-R 0.00</span>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label">Student Loan (NSFAS):</span>
+                <span class="calc-value negative" id="loanDeduct">-R 0.00</span>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label">Union Fees:</span>
+                <span class="calc-value negative" id="unionDeduct">-R 0.00</span>
+            </div>
+
+            <div class="calc-row total">
+                <span class="calc-label" style="font-weight: 700;">Total Deductions:</span>
+                <span class="calc-value negative" id="totalDeductions">-R 0.00</span>
+            </div>
+
+            <div class="calc-row total" style="border-top: 2px solid #22c55e; margin-top: 1rem;">
+                <span class="calc-label" style="font-weight: 700;">Monthly Net Salary:</span>
+                <span class="calc-value positive" id="netSalary">R 0.00</span>
+            </div>
+
+            <div class="calc-row total">
+                <span class="calc-label" style="font-weight: 700;">Annual Net Salary:</span>
+                <span class="calc-value positive" id="annualNet">R 0.00</span>
+            </div>
+
+            <div class="calc-row" style="margin-top: 1rem; border-top: 1px solid rgba(59,130,246,0.2); padding-top: 0.75rem;">
+                <span class="calc-label">Effective Tax Rate:</span>
+                <span class="calc-value" id="taxRate">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. Salary calculations based on SARS 2024/2025 tax rates. For informational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // 2024/2025 SA Tax Brackets
+        const TAX_BRACKETS = [
+            { threshold: 237100, rate: 0.18 },
+            { threshold: 370500, rate: 0.26 },
+            { threshold: 512800, rate: 0.31 },
+            { threshold: 673000, rate: 0.36 },
+            { threshold: 857900, rate: 0.39 },
+            { threshold: 1817000, rate: 0.41 },
+            { threshold: Infinity, rate: 0.45 }
+        ];
+
+        const TAX_REBATES_ANNUAL = 17000; // Primary rebate for 2024/2025
+        const UIF_RATE = 0.01; // 1% employee contribution
+        const UIF_MAX = 177.12; // Maximum UIF contribution per month (based on cap)
+
+        function formatCurrency(amount) {
+            return 'R ' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function calculatePAYE(annualTaxableIncome) {
+            if (annualTaxableIncome <= 0) return 0;
+            
+            let tax = 0;
+            let previousThreshold = 0;
+
+            for (let bracket of TAX_BRACKETS) {
+                if (annualTaxableIncome <= previousThreshold) break;
+                
+                let incomeInBracket = Math.min(annualTaxableIncome, bracket.threshold) - previousThreshold;
+                tax += incomeInBracket * bracket.rate;
+                previousThreshold = bracket.threshold;
+            }
+
+            // Apply rebate
+            tax = Math.max(0, tax - TAX_REBATES_ANNUAL);
+            return tax;
+        }
+
+        function calculateSalary() {
+            const gross = parseFloat(document.getElementById('grossSalary').value) || 0;
+            const threshold = parseFloat(document.getElementById('taxThreshold').value) || 87300;
+            
+            // Monthly deductions (convert to annual)
+            const medicalAidMonthly = parseFloat(document.getElementById('medicalAid').value) || 0;
+            const pensionMonthly = parseFloat(document.getElementById('pension').value) || 0;
+            const studentLoanMonthly = parseFloat(document.getElementById('studentLoan').value) || 0;
+            const unionFeesMonthly = parseFloat(document.getElementById('unionFees').value) || 0;
+            
+            const medicalAidAnnual = medicalAidMonthly * 12;
+            const pensionAnnual = pensionMonthly * 12;
+            const studentLoanAnnual = studentLoanMonthly * 12;
+            const unionFeesAnnual = unionFeesMonthly * 12;
+
+            // Calculate taxable income (gross minus tax-deductible contributions)
+            const taxDeductible = medicalAidAnnual + pensionAnnual;
+            const taxableIncome = Math.max(0, gross - threshold - taxDeductible);
+            
+            // Calculate PAYE
+            const paye = calculatePAYE(taxableIncome);
+            
+            // Calculate UIF (capped at max per month)
+            const monthlyGross = gross / 12;
+            const uifMonthly = Math.min(monthlyGross * UIF_RATE, UIF_MAX);
+            const uifAnnual = uifMonthly * 12;
+            
+            // Total deductions
+            const totalDeductions = paye + uifAnnual + medicalAidAnnual + pensionAnnual + studentLoanAnnual + unionFeesAnnual;
+            const netAnnual = gross - totalDeductions;
+            const netMonthly = netAnnual / 12;
+            
+            // Effective tax rate
+            const effectiveTaxRate = gross > 0 ? ((totalDeductions / gross) * 100).toFixed(1) : 0;
+            
+            // Update display
+            document.getElementById('displayGross').textContent = formatCurrency(gross);
+            document.getElementById('displayMonthly').textContent = formatCurrency(monthlyGross);
+            document.getElementById('payeTax').textContent = `-${formatCurrency(paye)}`;
+            document.getElementById('uif').textContent = `-${formatCurrency(uifAnnual)}`;
+            document.getElementById('medDeduct').textContent = `-${formatCurrency(medicalAidAnnual)}`;
+            document.getElementById('pensionDeduct').textContent = `-${formatCurrency(pensionAnnual)}`;
+            document.getElementById('loanDeduct').textContent = `-${formatCurrency(studentLoanAnnual)}`;
+            document.getElementById('unionDeduct').textContent = `-${formatCurrency(unionFeesAnnual)}`;
+            document.getElementById('totalDeductions').textContent = `-${formatCurrency(totalDeductions)}`;
+            document.getElementById('netSalary').textContent = formatCurrency(netMonthly);
+            document.getElementById('annualNet').textContent = formatCurrency(netAnnual);
+            document.getElementById('taxRate').textContent = `${effectiveTaxRate}%`;
+            
+            // Track calculation
+            gtag('event', 'salary_calculated', {
+                'event_category': 'salary_calculator',
+                'event_label': 'calculated'
+            });
+        }
+
+        // Initialize
+        calculateSalary();
+        
+        window.calculateSalary = calculateSalary;
+    </script>
+</body>
+</html>

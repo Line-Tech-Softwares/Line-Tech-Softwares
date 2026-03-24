@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Pomodoro Timer - Focus & Productivity Timer | Line Tech Tools</title>
+    <meta name="description" content="Boost your productivity with the Pomodoro Technique. Work in focused intervals, take breaks, and track your progress. Free online timer.">
+    <meta name="keywords" content="pomodoro timer, focus timer, productivity tool, study timer, work timer, time management">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #f97316; background: rgba(249, 115, 22, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #f97316;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #f97316;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #f97316;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+            z-index: 10;
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 5rem 2rem;
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Timer Container */
+        .timer-container {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(249, 115, 22, 0.3);
+            border-radius: 32px;
+            padding: 3rem 2rem;
+            max-width: 550px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .timer-container:hover {
+            border-color: #f97316;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.1);
+        }
+
+        .session-type {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .session-type.work { color: #f97316; }
+        .session-type.break { color: #22c55e; }
+
+        .timer-display {
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-size: 7rem;
+            font-weight: bold;
+            color: #f97316;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1;
+            letter-spacing: 0.05em;
+        }
+        @media (max-width: 768px) {
+            .timer-display { font-size: 4rem; }
+            .timer-container { padding: 2rem 1.5rem; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        button {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+        }
+        button.secondary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        button.secondary:hover {
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        button.pause {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .settings {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 480px) {
+            .settings { grid-template-columns: 1fr; }
+        }
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        input {
+            padding: 0.75rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+
+        .stats {
+            background: rgba(31, 41, 55, 0.4);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+        }
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            color: #9ca3af;
+        }
+        .stat-value {
+            color: #f97316;
+            font-weight: 700;
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #111827;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+        .footer a {
+            color: #f97316;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-hourglass-end"></i> Pomodoro Timer</h1>
+        
+        <div class="timer-container">
+            <div class="session-type work" id="sessionType">🍅 Work Session</div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            
+            <div class="controls">
+                <button onclick="startTimer()"><i class="fas fa-play"></i> Start</button>
+                <button class="pause" onclick="pauseTimer()"><i class="fas fa-pause"></i> Pause</button>
+                <button class="secondary" onclick="resetTimer()"><i class="fas fa-redo-alt"></i> Reset</button>
+            </div>
+
+            <div class="settings">
+                <div class="setting-group">
+                    <label for="workDuration"><i class="fas fa-briefcase"></i> Work Duration (min)</label>
+                    <input type="number" id="workDuration" min="1" max="60" value="25" step="1" onchange="updateSettings()">
+                </div>
+                <div class="setting-group">
+                    <label for="breakDuration"><i class="fas fa-coffee"></i> Break Duration (min)</label>
+                    <input type="number" id="breakDuration" min="1" max="30" value="5" step="1" onchange="updateSettings()">
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-check-circle"></i> Sessions Completed:</span>
+                    <span class="stat-value" id="sessionsCount">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-clock"></i> Total Focus Time:</span>
+                    <span class="stat-value" id="totalTime">0 min</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-info-circle"></i> Status:</span>
+                    <span class="stat-value" id="status">Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Line Tech Softwares | Stay focused, stay productive with the Pomodoro Technique</p>
+        </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Pomodoro Timer Logic
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+        let isWorkSession = true;
+        let timerInterval = null;
+        let sessionsCompleted = 0;
+        let totalFocusTime = 0;
+        let workDuration = 25;
+        let breakDuration = 5;
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = '<i class="fas fa-bell"></i> ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+            
+            const sessionType = document.getElementById('sessionType');
+            if (isWorkSession) {
+                sessionType.textContent = '🍅 Work Session';
+                sessionType.className = 'session-type work';
+            } else {
+                sessionType.textContent = '☕ Break Time';
+                sessionType.className = 'session-type break';
+            }
+        }
+
+        function playNotification() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 880;
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.8);
+            } catch(e) {
+                console.log('Audio not supported');
+            }
+            
+            // Also try to use browser notification
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(isWorkSession ? 'Time for a break!' : 'Back to work!', {
+                    body: isWorkSession ? 'Great job! Take a break.' : 'Break is over. Time to focus!',
+                    icon: '../../ASSETS/logos/Line Tech Logo 2.png'
+                });
+            }
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                Notification.requestPermission();
+            }
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('status').textContent = isWorkSession ? 'Focusing...' : 'Taking a break...';
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    playNotification();
+                    
+                    if (isWorkSession) {
+                        sessionsCompleted++;
+                        totalFocusTime += workDuration;
+                        document.getElementById('sessionsCount').textContent = sessionsCompleted;
+                        document.getElementById('totalTime').textContent = totalFocusTime + ' min';
+                        showNotification('🎉 Work session completed! Take a break.');
+                        
+                        isWorkSession = false;
+                        timeLeft = breakDuration * 60;
+                        document.getElementById('status').textContent = 'Break time!';
+                        
+                        gtag('event', 'pomodoro_completed', {
+                            'event_category': 'productivity',
+                            'event_label': 'work_session'
+                        });
+                    } else {
+                        isWorkSession = true;
+                        timeLeft = workDuration * 60;
+                        document.getElementById('status').textContent = 'Ready for next session!';
+                        showNotification('⏰ Break over! Ready to focus again?');
+                        
+                        gtag('event', 'break_completed', {
+                            'event_category': 'productivity',
+                            'event_label': 'break_session'
+                        });
+                    }
+                    
+                    updateDisplay();
+                    // Auto-start next session? (optional - commenting out for manual start)
+                    // startTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!isRunning) return;
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('status').textContent = 'Paused';
+        }
+
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            isWorkSession = true;
+            timeLeft = workDuration * 60;
+            updateDisplay();
+            document.getElementById('status').textContent = 'Ready';
+        }
+
+        function updateSettings() {
+            workDuration = parseInt(document.getElementById('workDuration').value) || 25;
+            breakDuration = parseInt(document.getElementById('breakDuration').value) || 5;
+            
+            if (workDuration < 1) workDuration = 1;
+            if (workDuration > 60) workDuration = 60;
+            if (breakDuration < 1) breakDuration = 1;
+            if (breakDuration > 30) breakDuration = 30;
+            
+            document.getElementById('workDuration').value = workDuration;
+            document.getElementById('breakDuration').value = breakDuration;
+            
+            resetTimer();
+        }
+
+        // Save stats to localStorage
+        function saveStats() {
+            localStorage.setItem('pomodoro_sessions', sessionsCompleted);
+            localStorage.setItem('pomodoro_focus_time', totalFocusTime);
+        }
+
+        function loadStats() {
+            const savedSessions = localStorage.getItem('pomodoro_sessions');
+            const savedTime = localStorage.getItem('pomodoro_focus_time');
+            if (savedSessions) sessionsCompleted = parseInt(savedSessions);
+            if (savedTime) totalFocusTime = parseInt(savedTime);
+            document.getElementById('sessionsCount').textContent = sessionsCompleted;
+            document.getElementById('totalTime').textContent = totalFocusTime + ' min';
+        }
+
+        // Auto-save stats on interval
+        setInterval(() => {
+            saveStats();
+        }, 10000);
+
+        // Initialize
+        loadStats();
+        requestNotificationPermission();
+        updateDisplay();
+        
+        window.startTimer = startTimer;
+        window.pauseTimer = pauseTimer;
+        window.resetTimer = resetTimer;
+        window.updateSettings = updateSettings;
+    </script>
+</body>
+</html>

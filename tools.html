@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Free Business & Productivity Tools by Line Tech</title>
+    <meta name="description" content="15+ free online tools: CV Builder, Invoice Generator, Budget Planner, Salary Calculator, Image to PDF, QR Code, Text Tools & more. Preview first, then export. No signup required.">
+    <meta name="keywords" content="free cv builder, invoice generator, budget planner, salary calculator sa, text tools, qr code generator, unit converter, pomodoro timer, password generator, expense tracker">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://linetechsoftwares.co.za/tools/tools.html">
+    <meta property="og:title" content="Free Business Tools by Line Tech">
+    <meta property="og:description" content="15+ smart tools for businesses & students. CV builder, invoices, financials, productivity tools & more.">
+    <meta property="og:image" content="../ASSETS/logos/Line Tech Logo 2.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Business Tools by Line Tech">
+
+    <!-- Favicon -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Styles -->
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-img:hover { border-color: #3b82f6; transform: scale(1.05); }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        /* ===== DESKTOP NAVIGATION ===== */
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU STYLES - VISIBLE ON MOBILE/TABLET ===== */
+        .hamburger {
+            display: none;  /* Hidden on desktop by default */
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        /* Mobile Navigation Overlay */
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(5) { animation-delay: 0.5s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+        .nav-mobile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBackground 3s ease-in-out infinite;
+        }
+        @keyframes pulseBackground {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* ===== RESPONSIVE BREAKPOINTS - SHOW HAMBURGER ON TABLET & MOBILE ===== */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;  /* Show hamburger on tablets and below */
+            }
+            .nav-desktop {
+                display: none;  /* Hide desktop navigation */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-link-mobile { font-size: 1.3rem; min-width: 180px; padding: 0.75rem 1.5rem; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hamburger-line, .nav-mobile, .nav-link-mobile, .nav-mobile::after { transition: none; animation: none; }
+        }
+        .hamburger:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+        /* ===== HERO SECTION ===== */
+        .tools-hero {
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+            padding: 8rem 0 3rem;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+        .tools-hero h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .tools-hero p {
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== TOOLS SECTION ===== */
+        .tools-main { padding: 3rem 0 4rem; }
+        .tools-section { margin-bottom: 4rem; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #3b82f6;
+            margin-bottom: 0.75rem;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+        .tool-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+        }
+        .tool-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .tool-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .tool-card p {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+        .tool-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(59, 130, 246, 0.2);
+            color: #9ca3af;
+        }
+        .badge.preview { background: rgba(59, 130, 246, 0.3); color: #60a5fa; }
+        .badge.pdf { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge.calc { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge.export { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge.util { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .tool-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .tool-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
+        
+        /* CTA Sections */
+        .tools-cta-section { margin: 2rem 0; }
+        .cta-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 28px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .cta-icon { font-size: 2.5rem; color: #3b82f6; margin-bottom: 0.75rem; }
+        .cta-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .cta-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .tools-cta {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 28px;
+            margin: 1rem 0 2rem;
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .tools-cta h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .tools-cta p { opacity: 0.9; margin-bottom: 1rem; }
+        .cta-btn {
+            background: white;
+            color: #3b82f6;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 2rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; font-size: 1.1rem; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: #3b82f6; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .footer-social .social-link:hover { background: #3b82f6; color: white; transform: translateY(-2px); }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+        
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-banner-content h2 { font-size: 1rem; margin-bottom: 0.2rem; }
+        #cookie-banner-content p { font-size: 0.75rem; opacity: 0.8; }
+        #cookie-accept {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-hero { padding-top: 6rem; }
+            .tools-grid { gap: 1rem; }
+            .tools-section { margin-bottom: 2.5rem; }
+            .cta-card { padding: 1.5rem; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tool-card, .cta-card, .tools-cta { animation: fadeInUp 0.6s ease; }
+    </style>
+</head>
+<body>
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Softwares</span>
+                </div>
+                <nav class="nav-desktop">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="../index.html#services" class="nav-link">Services</a>
+                    <a href="../projects.html" class="nav-link">Projects</a>
+                    <a href="./tools.html" class="nav-link active">Tools</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../index.html" class="nav-link-mobile">Home</a>
+                <a href="../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="./tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="tools-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-tools"></i> <span>100% Free Tools</span></div>
+                <h1>Free Business Tools by Line Tech</h1>
+                <p>Preview first, export PDF/CSV. 3 free uses, then unlock more. Perfect for students & businesses.</p>
+            </div>
+        </div>
+    </section>
+
+    <main class="tools-main">
+        <div class="container">
+            <!-- Popular Tools -->
+            <section id="popular" class="tools-section">
+                <div class="section-header">
+                    <div class="section-badge"><i class="fas fa-fire"></i> Most Popular</div>
+                    <h2 class="section-title">Essential Tools</h2>
+                    <p class="section-subtitle">Most used by students, freelancers & businesses</p>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-user-tie"></i></div><h3>Smart CV Builder</h3><p>Live preview CV, export professional PDF. Perfect for students & job seekers.</p><div class="tool-meta"><span class="badge preview">Live Preview</span><span class="badge pdf">PDF Export</span></div><a href="./tools/cv-builder.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-file-invoice-dollar"></i></div><h3>Invoice Generator</h3><p>Professional SA VAT invoices. Live preview, export as PDF instantly.</p><div class="tool-meta"><span class="badge preview">Live Preview</span><span class="badge pdf">PDF Export</span></div><a href="./tools/invoice-generator.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-images"></i></div><h3>Image to PDF</h3><p>Convert images to single or multi-page PDF. Perfect for scanning & documents.</p><div class="tool-meta"><span class="badge preview">Preview</span><span class="badge pdf">PDF Export</span></div><a href="./tools/image-to-pdf.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                  <!-- <div class="tool-card"><div class="tool-icon"><i class="fas fa-clock"></i></div><h3>Timesheet Tracker</h3><p>Track billable hours, auto-calculate totals. Export CSV or PDF reports.</p><div class="tool-meta"><span class="badge calc">Live Calc</span><span class="badge export">Export</span></div><a href="./tools/timesheet-tracker.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div> -->
+                </div>
+            </section>
+
+            <!-- Finance Tools -->
+            <section id="finance" class="tools-section">
+                <div class="section-header">
+                    <div class="section-badge"><i class="fas fa-piggy-bank"></i> Finance</div>
+                    <h2 class="section-title">Finance & Budgeting Tools</h2>
+                    <p class="section-subtitle">Manage money, track expenses, calculate salaries</p>
+                </div>
+                <div class="tools-grid">
+                  
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-calculator"></i></div><h3>Salary Calculator SA</h3><p>Calculate net salary with SA tax, PAYE, UIF. Supports deductions & bonuses.</p><div class="tool-meta"><span class="badge calc">Instant Calc</span><span class="badge export">Save Results</span></div><a href="./tools/salary-calculator.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-credit-card"></i></div><h3>Expense Tracker</h3><p>Log expenses by category. Track spending patterns & generate reports.</p><div class="tool-meta"><span class="badge calc">Category Track</span><span class="badge export">PDF Report</span></div><a href="./tools/expense-tracker.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                </div>
+            </section>
+
+            <!-- Productivity Tools -->
+            <section id="productivity" class="tools-section">
+                <div class="section-header">
+                    <div class="section-badge"><i class="fas fa-rocket"></i> Productivity</div>
+                    <h2 class="section-title">Productivity & Study Tools</h2>
+                    <p class="section-subtitle">Stay focused, manage tasks & time effectively</p>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-hourglass-end"></i></div><h3>Pomodoro Timer</h3><p>Focus sessions using Pomodoro technique. Customizable intervals & notifications.</p><div class="tool-meta"><span class="badge util">Timer</span><span class="badge export">Session Log</span></div><a href="./tools/pomodoro-timer.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-tasks"></i></div><h3>Task Manager</h3><p>Create to-do lists with priorities. Track progress & export task reports.</p><div class="tool-meta"><span class="badge util">Task List</span><span class="badge export">Export</span></div><a href="./tools/task-manager.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-book"></i></div><h3>Study Planner</h3><p>Plan study sessions by subject. Generate study schedules & revision notes.</p><div class="tool-meta"><span class="badge util">Schedule</span><span class="badge export">PDF Plan</span></div><a href="./tools/study-planner.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                </div>
+            </section>
+
+            <!-- Utility Tools -->
+            <section id="utilities" class="tools-section">
+                <div class="section-header">
+                    <div class="section-badge"><i class="fas fa-toolbox"></i> Utilities</div>
+                    <h2 class="section-title">Handy Utility Tools</h2>
+                    <p class="section-subtitle">Text processing, QR codes, generators & converters</p>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-qrcode"></i></div><h3>QR Code Generator</h3><p>Create QR codes instantly. Link to URLs, WiFi, vCards. Download as PNG/SVG.</p><div class="tool-meta"><span class="badge util">Live Preview</span><span class="badge export">Download</span></div><a href="./tools/qr-code-generator.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-exchange-alt"></i></div><h3>Unit Converter</h3><p>Convert between units: length, weight, temperature, volume & more. Instant results.</p><div class="tool-meta"><span class="badge calc">Live Conversion</span><span class="badge util">40+ Units</span></div><a href="./tools/unit-converter.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-font"></i></div><h3>Text Tools Suite</h3><p>Word counter, case converter, reverse text & more. All text utilities in one place.</p><div class="tool-meta"><span class="badge util">Live Analysis</span><span class="badge export">Copy to Clipboard</span></div><a href="./tools/text-tools.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-lock"></i></div><h3>Password Generator</h3><p>Generate strong random passwords. Customize length, complexity & characters.</p><div class="tool-meta"><span class="badge util">Secure</span><span class="badge export">Copy</span></div><a href="./tools/password-generator.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-palette"></i></div><h3>Color Palette Generator</h3><p>Create color palettes. Get hex, RGB values. Perfect for designers & developers.</p><div class="tool-meta"><span class="badge util">Visual</span><span class="badge export">Export Code</span></div><a href="./tools/color-palette.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                    <div class="tool-card"><div class="tool-icon"><i class="fas fa-barcode"></i></div><h3>Barcode Generator</h3><p>Create barcodes from text. Multiple formats (Code128, EAN-13). Download as image.</p><div class="tool-meta"><span class="badge util">Preview</span><span class="badge export">PNG Download</span></div><a href="./tools/barcode-generator.html" class="tool-btn"><i class="fas fa-arrow-right"></i> Use Tool</a></div>
+                </div>
+            </section>
+
+            <!-- CTA Card -->
+            <section class="tools-cta-section">
+                <div class="cta-card">
+                    <div class="cta-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Need a Custom Tool?</h3>
+                    <p>We can build specialized tools tailored to your business workflow & unique needs.</p>
+                    <a href="../index.html#contact" class="cta-link"><i class="fas fa-envelope"></i> Request Custom Tool</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="tools-cta">
+        <div class="container">
+            <h2>Have a Tool Idea?</h2>
+            <p>Suggest new tools or request custom development for your business needs.</p>
+            <a href="../index.html#contact" class="cta-btn">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <p style="color: #9ca3af; font-size: 0.85rem;">Plug into Possibility</p>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links"><li><a href="../index.html">Home</a></li><li><a href="../projects.html">Projects</a></li><li><a href="./tools.html">Free Tools</a></li><li><a href="../index.html#contact">Contact</a></li></ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Tools</h3>
+                    <ul class="footer-links"><li><a href="#popular">Popular Tools</a></li><li><a href="#finance">Finance Tools</a></li><li><a href="#productivity">Productivity</a></li><li><a href="#utilities">Utilities</a></li></ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links"><li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li><li><a href="tel:+27653114090">+27 65 311 4090</a></li></ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+    </script>
+
+    <script>
+        // FULL HAMBURGER MENU FUNCTIONALITY - WORKS ON ALL MOBILE/TABLET DEVICES
+        (function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileNav = document.getElementById('nav-mobile');
+            const body = document.body;
+            
+            if (hamburger && mobileNav) {
+                // Toggle menu on hamburger click
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hamburger.classList.toggle('active');
+                    mobileNav.classList.toggle('active');
+                    body.classList.toggle('no-scroll');
+                });
+                
+                // Close menu when clicking on a mobile nav link
+                const mobileLinks = mobileNav.querySelectorAll('.nav-link-mobile');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    });
+                });
+                
+                // Close menu when clicking on the overlay background
+                mobileNav.addEventListener('click', function(e) {
+                    if (e.target === mobileNav) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+                
+                // Close menu on ESC key press
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+            }
+            
+            // Cookie banner
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept');
+            if (!localStorage.getItem('cookieAccepted')) {
+                cookieBanner.style.display = 'flex';
+            }
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                    localStorage.setItem('cookieAccepted', 'true');
+                    cookieBanner.style.display = 'none';
+                });
+            }
+            
+            // Header scroll effect
+            const header = document.querySelector('.header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId && targetId !== '#') {
+                        const target = document.querySelector(targetId);
+                        if (target) {
+                            e.preventDefault();
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

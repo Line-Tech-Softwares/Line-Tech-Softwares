@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Color Palette Generator - HEX & RGB Codes | Line Tech Tools</title>
+    <meta name="description" content="Generate beautiful color palettes with HEX & RGB codes. Create complementary, analogous, triadic schemes. Export CSS for your design projects.">
+    <meta name="keywords" content="color palette generator, hex colors, rgb colors, complementary colors, analogous colors, design tools">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-img:hover { border-color: #a855f7; transform: scale(1.05); }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        /* ===== DESKTOP NAVIGATION ===== */
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #a855f7;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU STYLES ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #a855f7;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+        }
+        .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+        .nav-mobile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBackground 3s ease-in-out infinite;
+        }
+        @keyframes pulseBackground {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-link-mobile { font-size: 1.3rem; min-width: 180px; padding: 0.75rem 1.5rem; }
+        }
+
+        /* ===== BACK TO TOOLS BUTTON ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        .back-to-tools:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateX(-5px);
+            border-color: #a855f7;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #d8b4fe, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== PALETTE CONTAINER ===== */
+        .palette-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+        }
+        
+        select {
+            padding: 0.8rem 1.5rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        select:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+        
+        .palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .color-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+        .color-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        
+        .color-display {
+            height: 160px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+        }
+        .color-display:hover {
+            transform: scale(1.02);
+        }
+        .color-display::after {
+            content: '🎨';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .color-display:hover::after {
+            opacity: 0.7;
+        }
+        
+        .color-info {
+            background: rgba(31, 41, 55, 0.9);
+            padding: 1rem;
+        }
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            word-break: break-all;
+        }
+        .rgb-value {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 0.75rem;
+            font-family: monospace;
+        }
+        .color-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .color-buttons button {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+            flex: 1;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .color-buttons button:hover {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            transform: translateY(-1px);
+        }
+        
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-banner-content h2 { font-size: 1rem; margin-bottom: 0.2rem; }
+        #cookie-banner-content p { font-size: 0.75rem; opacity: 0.8; }
+        #cookie-accept {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+        
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #a855f7;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(168, 85, 247, 0.2);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer p {
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .palette-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .controls button, .controls select {
+                width: 100%;
+            }
+            .palette {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1rem;
+            }
+            .color-display {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <!-- Back to Tools -->
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <!-- App Header -->
+    <div class="app-header">
+        <h1><i class="fas fa-palette"></i> Color Palette Generator</h1>
+        <p>Create beautiful color palettes. Export HEX, RGB &amp; CSS code. Perfect for designers &amp; developers.</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="palette-container">
+        <div class="controls">
+            <button onclick="generatePalette()"><i class="fas fa-magic"></i> Generate Palette</button>
+            <select id="paletteType" onchange="generatePalette()">
+                <option value="random">🎲 Random Colors</option>
+                <option value="harmony">🎨 Complementary</option>
+                <option value="analogous">🌈 Analogous</option>
+                <option value="triadic">🔺 Triadic</option>
+                <option value="shades">⚫ Shades & Tints</option>
+            </select>
+            <button onclick="exportPaletteCSS()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-download"></i> Export CSS</button>
+            <button onclick="copyAllColors()" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-copy"></i> Copy All HEX</button>
+        </div>
+
+        <div id="palette" class="palette"></div>
+        
+        <div style="text-align: center; margin-top: 1rem;">
+            <p style="color: #9ca3af; font-size: 0.8rem;">
+                <i class="fas fa-info-circle"></i> Click on color to refresh individually | Click copy buttons to save colors
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Line Tech Softwares. Design tools for creators and developers.</p>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+    </script>
+
+    <script>
+        // ===== HAMBURGER MENU =====
+        (function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileNav = document.getElementById('nav-mobile');
+            const body = document.body;
+            
+            if (hamburger && mobileNav) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hamburger.classList.toggle('active');
+                    mobileNav.classList.toggle('active');
+                    body.classList.toggle('no-scroll');
+                });
+                
+                const mobileLinks = mobileNav.querySelectorAll('.nav-link-mobile');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    });
+                });
+                
+                mobileNav.addEventListener('click', function(e) {
+                    if (e.target === mobileNav) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        body.classList.remove('no-scroll');
+                    }
+                });
+            }
+        })();
+
+        // ===== COOKIE BANNER =====
+        (function() {
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('cookie-accept');
+            if (!localStorage.getItem('cookieAccepted')) {
+                cookieBanner.style.display = 'flex';
+            }
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                    localStorage.setItem('cookieAccepted', 'true');
+                    cookieBanner.style.display = 'none';
+                });
+            }
+        })();
+
+        // ===== HEADER SCROLL EFFECT =====
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ===== COLOR PALETTE LOGIC =====
+        let colors = [];
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.innerHTML = '<i class="fas fa-check-circle"></i> ' + message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2500);
+        }
+
+        function generateRandomColor() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHex(r, g, b) {
+            return '#' + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('').toUpperCase();
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            return [Math.round(255 * f(0)), Math.round(255 * f(8)), Math.round(255 * f(4))];
+        }
+
+        function refreshSingleColor(index) {
+            const type = document.getElementById('paletteType').value;
+            if (type === 'random') {
+                colors[index] = generateRandomColor();
+            } else {
+                generatePalette();
+            }
+            renderPalette();
+        }
+
+        function generatePalette() {
+            const type = document.getElementById('paletteType').value;
+            let baseHue = Math.floor(Math.random() * 360);
+            colors = [];
+
+            switch(type) {
+                case 'random':
+                    for (let i = 0; i < 5; i++) colors.push(generateRandomColor());
+                    break;
+                case 'harmony': {
+                    const hues = [baseHue, (baseHue + 180) % 360];
+                    hues.forEach(h => {
+                        const rgb = hslToRgb(h, 70, 55);
+                        colors.push(rgbToHex(rgb[0], rgb[1], rgb[2]));
+                    });
+                    break;
+                }
+                case 'analogous': {
+                    const hues = [baseHue, (baseHue + 30) % 360, (baseHue - 30 + 360) % 360, (baseHue + 60) % 360, (baseHue - 60 + 360) % 360];
+                    hues.forEach(h => {
+                        const rgb = hslToRgb(h, 70, 55);
+                        colors.push(rgbToHex(rgb[0], rgb[1], rgb[2]));
+                    });
+                    break;
+                }
+                case 'triadic': {
+                    const hues = [baseHue, (baseHue + 120) % 360, (baseHue + 240) % 360];
+                    hues.forEach(h => {
+                        const rgb = hslToRgb(h, 70, 55);
+                        colors.push(rgbToHex(rgb[0], rgb[1], rgb[2]));
+                    });
+                    for (let i = 0; i < 2; i++) colors.push(generateRandomColor());
+                    break;
+                }
+                case 'shades': {
+                    const rgb = hslToRgb(baseHue, 70, 55);
+                    const baseColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
+                    colors.push(baseColor);
+                    for (let i = 1; i < 5; i++) {
+                        const lighter = hexToRgb(baseColor);
+                        const factor = i * 0.12;
+                        colors.push(rgbToHex(
+                            Math.min(255, Math.round(lighter.r + (255 - lighter.r) * factor)),
+                            Math.min(255, Math.round(lighter.g + (255 - lighter.g) * factor)),
+                            Math.min(255, Math.round(lighter.b + (255 - lighter.b) * factor))
+                        ));
+                    }
+                    break;
+                }
+            }
+            renderPalette();
+        }
+
+        function renderPalette() {
+            const container = document.getElementById('palette');
+            container.innerHTML = colors.map((color, i) => {
+                const rgb = hexToRgb(color);
+                return `
+                    <div class="color-card">
+                        <div class="color-display" style="background: ${color};" 
+                             onclick="refreshSingleColor(${i})"
+                             title="Click to refresh this color"></div>
+                        <div class="color-info">
+                            <div class="color-value">${color}</div>
+                            <div class="rgb-value">rgb(${rgb.r}, ${rgb.g}, ${rgb.b})</div>
+                            <div class="color-buttons">
+                                <button onclick="copyColor('${color}')"><i class="fas fa-copy"></i> HEX</button>
+                                <button onclick="copyRGB(${rgb.r}, ${rgb.g}, ${rgb.b})"><i class="fas fa-copy"></i> RGB</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.copyColor = function(color) {
+            navigator.clipboard.writeText(color);
+            showNotification(color + ' copied!');
+        };
+
+        window.copyRGB = function(r, g, b) {
+            const rgb = `rgb(${r}, ${g}, ${b})`;
+            navigator.clipboard.writeText(rgb);
+            showNotification(rgb + ' copied!');
+        };
+
+        window.copyAllColors = function() {
+            const allHex = colors.join(', ');
+            navigator.clipboard.writeText(allHex);
+            showNotification('All colors copied: ' + allHex);
+        };
+
+        window.refreshSingleColor = function(index) {
+            const type = document.getElementById('paletteType').value;
+            if (type === 'random') {
+                colors[index] = generateRandomColor();
+                renderPalette();
+            } else {
+                generatePalette();
+            }
+        };
+
+        window.exportPaletteCSS = function() {
+            let css = '/* Color Palette Generated by Line Tech Tools */\n\n:root {\n';
+            colors.forEach((color, i) => {
+                css += `  --color-${i+1}: ${color};\n`;
+            });
+            css += '}\n\n';
+            css += '/* Usage Example */\n';
+            css += '.element {\n';
+            css += '  background: var(--color-1);\n';
+            css += '  color: var(--color-2);\n';
+            css += '}\n';
+            
+            const blob = new Blob([css], { type: 'text/css' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'palette-' + new Date().toISOString().slice(0, 10) + '.css';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            showNotification('CSS file downloaded!');
+        };
+
+        window.generatePalette = generatePalette;
+
+        // Initialize
+        generatePalette();
+    </script>
+</body>
+</html>

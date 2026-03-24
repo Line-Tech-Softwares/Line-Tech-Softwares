@@ -16,11 +16,160 @@
         <priority>0.8</priority>
     </url>
     
-    <!-- Useless Facts Room Project Page -->
+    <!-- Tools Page -->
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools.html</loc>
+        <lastmod>2026-03-24</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Project Pages -->
     <url>
         <loc>https://linetechsoftwares.co.za/uselessfactsroom.html</loc>
         <lastmod>2026-01-07</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/golden_pallete.html</loc>
+           <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/number_maze.html</loc>
+        <lastmod>2026-01-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/PomoForge.html</loc>
+        <lastmod>2026-01-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/weather_dashboard.html</loc>
+        <lastmod>2026-01-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <!-- Tool Pages -->
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/budget-planner.html</loc>
+        <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/barcode-generator.html</loc>
+        <lastmod>2026-01-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/color-palette.html</loc>
+       <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/cv-builder.html</loc>
+         <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/expense-tracker.html</loc>
+           <lastmod>2026-03-24</lastmod>  
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/image-to-pdf.html</loc>
+        <lastmod>2026-01-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/invoice-generator.html</loc>
+           <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/password-generator.html</loc>
+           <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/pomodoro-timer.html</loc>
+            <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/qr-code-generator.html</loc>
+     <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/salary-calculator.html</loc>
+           <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/study-planner.html</loc>
+         <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/task-manager.html</loc>
+           <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/text-tools.html</loc>
+        <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/timesheet-tracker.html</loc>
+        <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://linetechsoftwares.co.za/tools/unit-converter.html</loc>
+            <lastmod>2026-03-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
     </url>
 </urlset>

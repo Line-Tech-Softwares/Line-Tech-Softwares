@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Timesheet Tracker - Work Hours & Calculator | Line Tech Tools</title>
+    <meta name="description" content="Track work hours, auto-calculate totals, export CSV for Excel or PDF. Perfect for freelancers, contractors, and remote workers in South Africa.">
+    <meta name="keywords" content="timesheet tracker, work hours tracker, freelance hours, timesheet calculator, export csv timesheet">
+    <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../ASSETS/Line-Tech-Logo-2.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        body.no-scroll { height: 100vh; overflow: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover, .nav-link.active { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #f59e0b;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+            margin-left: auto;
+        }
+        .hamburger:hover { transform: scale(1.1); }
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+        .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+        
+        .nav-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-link-mobile {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        .nav-link-mobile:hover::before,
+        .nav-link-mobile.active::before { left: 0; }
+        .nav-link-mobile:hover,
+        .nav-link-mobile.active {
+            color: white;
+            border-color: #f59e0b;
+            transform: translateY(-3px);
+        }
+        .nav-mobile .nav-link-mobile {
+            animation: slideInFromRight 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .nav-mobile.active .nav-link-mobile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-mobile.active .nav-link-mobile:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes slideInFromRight { to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-desktop { display: none; }
+            .logo-text { font-size: 1rem; }
+        }
+
+        /* ===== BACK TO TOOLS ===== */
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6rem 0 0 2rem;
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        @media (max-width: 768px) {
+            .back-to-tools { margin: 5rem 0 0 1rem; font-size: 0.9rem; }
+        }
+
+        /* ===== APP HEADER ===== */
+        .app-header {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+        }
+        .app-header h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .app-header p {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== TOOL CONTAINER ===== */
+        .tool-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        @media (max-width: 768px) {
+            .tool-container { padding: 0 1rem; }
+        }
+
+        .add-entry {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-entry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .entries-container {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+        .entries-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .entries-container::-webkit-scrollbar-track {
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 10px;
+        }
+        .entries-container::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+
+        .entry-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1.8fr 1fr 1.2fr 0.8fr;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #f59e0b;
+            transition: all 0.3s;
+        }
+        .entry-row:hover {
+            background: rgba(31, 41, 55, 0.6);
+            transform: translateX(3px);
+        }
+        @media (max-width: 768px) {
+            .entry-row {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+        input {
+            padding: 0.7rem 1rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+        .remove-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 0.6rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .remove-btn:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Summary Section */
+        #summary {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        #summary h2 {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .summary-card {
+            background: rgba(31, 41, 55, 0.4);
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .summary-card .label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .summary-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+        .earnings-value {
+            color: #22c55e;
+        }
+
+        /* Export Section */
+        .export-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .export-section p {
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+        .export-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        .export-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+        .export-btn.csv-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .export-btn.pdf-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        /* Cookie Banner */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            z-index: 1100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #cookie-accept {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border-top: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 { color: white; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; font-size: 0.85rem; }
+        .footer-links a:hover { color: #f59e0b; }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+        .footer-social .social-link {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(245, 158, 11, 0.1);
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../../index.html" class="logo">
+                    <img src="../../ASSETS/logos/Line Tech Logo 2.png" alt="Line Tech Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40?text=LT'">
+                    <span class="logo-text">Line Tech Tools</span>
+                </a>
+                <nav class="nav-desktop">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                    <a href="../../index.html#services" class="nav-link">Services</a>
+                    <a href="../../projects.html" class="nav-link">Projects</a>
+                    <a href="../tools.html" class="nav-link active">Tools</a>
+                    <a href="../../index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            <nav class="nav-mobile" id="nav-mobile">
+                <a href="../../index.html" class="nav-link-mobile">Home</a>
+                <a href="../../index.html#services" class="nav-link-mobile">Services</a>
+                <a href="../../projects.html" class="nav-link-mobile">Projects</a>
+                <a href="../tools.html" class="nav-link-mobile active">Tools</a>
+                <a href="../../index.html#contact" class="nav-link-mobile">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cookie-banner" style="display: none;">
+        <div id="cookie-banner-content">
+            <h2>🍪 We Use Cookies</h2>
+            <p>We use essential cookies to provide our services and improve your experience.</p>
+        </div>
+        <button id="cookie-accept">Got it</button>
+    </div>
+
+    <a href="../tools.html" class="back-to-tools">
+        <i class="fas fa-arrow-left"></i> Back to Tools
+    </a>
+
+    <div class="app-header">
+        <h1><i class="fas fa-clock"></i> Timesheet Tracker</h1>
+        <p>Track work hours, calculate earnings, and export reports. Perfect for freelancers and contractors.</p>
+    </div>
+
+    <div class="tool-container">
+        <button class="add-entry" onclick="addEntry()">
+            <i class="fas fa-plus"></i> Add Work Entry
+        </button>
+        
+        <div id="entries-container" class="entries-container"></div>
+        
+        <div id="summary" style="display: none;">
+            <h2><i class="fas fa-chart-line"></i> Timesheet Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="label"><i class="fas fa-hourglass-half"></i> Total Hours</div>
+                    <div class="value" id="total-hours">0.00</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label"><i class="fas fa-calendar-week"></i> Total Days</div>
+                    <div class="value" id="total-days">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label"><i class="fas fa-chart-simple"></i> Avg Hours/Day</div>
+                    <div class="value" id="avg-hours">0.00</div>
+                </div>
+                <div class="summary-card">
+                    <div class="label"><i class="fas fa-currency"></i> Total Earnings</div>
+                    <div class="value earnings-value" id="total-earnings">R 0.00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="export-section" id="export-section" style="display: none;">
+            <p><i class="fas fa-chart-line"></i> Free exports: <span id="uses-left-timesheet">3</span>/3 remaining</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="export-btn csv-btn" onclick="exportTimesheetCSV()">
+                    <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+                <button class="export-btn pdf-btn" onclick="exportTimesheetPDF()">
+                    <i class="fas fa-file-pdf"></i> Export PDF Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Line Tech</h3>
+                    <p class="footer-tagline">Plug into Possibility</p>
+                    <div class="footer-social">
+                        <a href="https://x.com/linetech___" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/linetechsoftwares/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/line-tech-softwares" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../../index.html">Home</a></li>
+                        <li><a href="../tools.html">Tools</a></li>
+                        <li><a href="../../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@linetechsoftwares.co.za">info@linetechsoftwares.co.za</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Line Tech Softwares. Track your hours, get paid accurately.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQ0LWHM8J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JDQ0LWHM8J');
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('nav-mobile');
+        if(hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            mobileNav.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // Cookie Banner
+        if(!localStorage.getItem('cookieAccepted')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+        document.getElementById('cookie-accept')?.addEventListener('click', () => {
+            localStorage.setItem('cookieAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('.header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Timesheet Logic
+        let entries = [];
+        let nextId = 0;
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 2500);
+        }
+
+        function getUses() {
+            return parseInt(localStorage.getItem('timesheetUses') || '0');
+        }
+
+        function incrementUses() {
+            localStorage.setItem('timesheetUses', getUses() + 1);
+        }
+
+        function updateUsesDisplay() {
+            const usesLeft = Math.max(0, 3 - getUses());
+            document.getElementById('uses-left-timesheet').textContent = usesLeft;
+        }
+
+        function addEntry() {
+            const id = nextId++;
+            entries.push({
+                id: id,
+                date: '',
+                project: '',
+                hours: 0,
+                rate: 0
+            });
+            renderEntries();
+            updateTotals();
+        }
+
+        function removeEntry(id) {
+            entries = entries.filter(e => e.id !== id);
+            renderEntries();
+            updateTotals();
+        }
+
+        function updateEntry(id, field, value) {
+            const entry = entries.find(e => e.id === id);
+            if(entry) {
+                if(field === 'date') entry.date = value;
+                if(field === 'project') entry.project = value;
+                if(field === 'hours') entry.hours = parseFloat(value) || 0;
+                if(field === 'rate') entry.rate = parseFloat(value) || 0;
+                updateTotals();
+            }
+        }
+
+        function renderEntries() {
+            const container = document.getElementById('entries-container');
+            if(entries.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #9ca3af; padding: 3rem;"><i class="fas fa-calendar-plus" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>No entries yet. Click "Add Work Entry" to start tracking.</div>';
+                return;
+            }
+            
+            container.innerHTML = entries.map(entry => `
+                <div class="entry-row" data-id="${entry.id}">
+                    <input type="date" value="${entry.date}" onchange="updateEntry(${entry.id}, 'date', this.value)">
+                    <input type="text" placeholder="Project / Client" value="${escapeHtml(entry.project)}" onchange="updateEntry(${entry.id}, 'project', this.value)">
+                    <input type="number" placeholder="Hours" step="0.25" value="${entry.hours || ''}" onchange="updateEntry(${entry.id}, 'hours', this.value)">
+                    <input type="number" placeholder="Rate (R/hr)" step="0.01" value="${entry.rate || ''}" onchange="updateEntry(${entry.id}, 'rate', this.value)">
+                    <button class="remove-btn" onclick="removeEntry(${entry.id})"><i class="fas fa-trash"></i> Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            if(!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function updateTotals() {
+            const totalHours = entries.reduce((sum, e) => sum + e.hours, 0);
+            const uniqueDates = new Set(entries.filter(e => e.date).map(e => e.date)).size;
+            const avgHoursPerDay = uniqueDates > 0 ? totalHours / uniqueDates : 0;
+            const totalEarnings = entries.reduce((sum, e) => sum + (e.hours * e.rate), 0);
+            
+            document.getElementById('total-hours').textContent = totalHours.toFixed(2);
+            document.getElementById('total-days').textContent = uniqueDates;
+            document.getElementById('avg-hours').textContent = avgHoursPerDay.toFixed(2);
+            document.getElementById('total-earnings').textContent = 'R ' + totalEarnings.toFixed(2);
+            
+            const summaryDiv = document.getElementById('summary');
+            const exportDiv = document.getElementById('export-section');
+            if(entries.length > 0) {
+                summaryDiv.style.display = 'block';
+                exportDiv.style.display = 'block';
+                updateUsesDisplay();
+            } else {
+                summaryDiv.style.display = 'none';
+                exportDiv.style.display = 'none';
+            }
+        }
+
+        function exportTimesheetCSV() {
+            if(entries.length === 0) {
+                showNotification('No entries to export');
+                return;
+            }
+            
+            const uses = getUses();
+            if(uses >= 3) {
+                showNotification('Free uses exhausted! Upgrade to continue.');
+                return;
+            }
+            
+            let csv = 'Date,Project,Hours,Rate (R/hr),Total (R)\n';
+            entries.forEach(e => {
+                const total = (e.hours * e.rate).toFixed(2);
+                csv += `"${e.date}","${e.project}",${e.hours},${e.rate},${total}\n`;
+            });
+            
+            // Add summary
+            const totalHours = entries.reduce((sum, e) => sum + e.hours, 0);
+            const totalEarnings = entries.reduce((sum, e) => sum + (e.hours * e.rate), 0);
+            csv += `\n"SUMMARY","Total Hours",${totalHours.toFixed(2)},,${totalEarnings.toFixed(2)}\n`;
+            
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `timesheet_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            incrementUses();
+            updateUsesDisplay();
+            showNotification('CSV exported successfully!');
+            
+            gtag('event', 'timesheet_exported', {
+                'event_category': 'timesheet',
+                'event_label': 'csv'
+            });
+        }
+
+        async function exportTimesheetPDF() {
+            if(entries.length === 0) {
+                showNotification('No entries to export');
+                return;
+            }
+            
+            const uses = getUses();
+            if(uses >= 3) {
+                showNotification('Free uses exhausted! Upgrade to continue.');
+                return;
+            }
+            
+            const totalHours = entries.reduce((sum, e) => sum + e.hours, 0);
+            const totalEarnings = entries.reduce((sum, e) => sum + (e.hours * e.rate), 0);
+            const uniqueDates = new Set(entries.filter(e => e.date).map(e => e.date)).size;
+            
+            // Create HTML content for PDF
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Timesheet Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 2rem; }
+                        h1 { color: #f59e0b; border-bottom: 2px solid #f59e0b; padding-bottom: 0.5rem; }
+                        h2 { color: #f59e0b; margin-top: 1.5rem; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+                        th, td { border: 1px solid #ddd; padding: 0.75rem; text-align: left; }
+                        th { background: #f59e0b; color: white; }
+                        .summary { margin-top: 2rem; background: #f3f4f6; padding: 1rem; border-radius: 8px; }
+                        .summary-row { display: flex; justify-content: space-between; padding: 0.5rem 0; }
+                        .footer { margin-top: 2rem; text-align: center; color: #6b7280; font-size: 0.8rem; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Timesheet Report</h1>
+                    <p>Generated: ${new Date().toLocaleString()}</p>
+                    
+                    <h2>Work Entries</h2>
+                    <table>
+                        <thead>
+                            <tr><th>Date</th><th>Project/Client</th><th>Hours</th><th>Rate (R/hr)</th><th>Total (R)</th></tr>
+                        </thead>
+                        <tbody>
+                            ${entries.map(e => `
+                                <tr>
+                                    <td>${e.date || '-'}</td>
+                                    <td>${e.project || '-'}</td>
+                                    <td>${e.hours}</td>
+                                    <td>R ${e.rate}</td>
+                                    <td>R ${(e.hours * e.rate).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="summary">
+                        <h2>Summary</h2>
+                        <div class="summary-row"><strong>Total Hours:</strong> <span>${totalHours.toFixed(2)}</span></div>
+                        <div class="summary-row"><strong>Total Days:</strong> <span>${uniqueDates}</span></div>
+                        <div class="summary-row"><strong>Average Hours/Day:</strong> <span>${(totalHours / (uniqueDates || 1)).toFixed(2)}</span></div>
+                        <div class="summary-row"><strong>Total Earnings:</strong> <span>R ${totalEarnings.toFixed(2)}</span></div>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>Generated by Line Tech Timesheet Tracker</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.print();
+            
+            incrementUses();
+            updateUsesDisplay();
+            showNotification('PDF report generated!');
+            
+            gtag('event', 'timesheet_exported', {
+                'event_category': 'timesheet',
+                'event_label': 'pdf'
+            });
+        }
+
+        // Initialize with one entry
+        addEntry();
+        
+        window.addEntry = addEntry;
+        window.removeEntry = removeEntry;
+        window.updateEntry = updateEntry;
+        window.exportTimesheetCSV = exportTimesheetCSV;
+        window.exportTimesheetPDF = exportTimesheetPDF;
+    </script>
+</body>
+</html>
