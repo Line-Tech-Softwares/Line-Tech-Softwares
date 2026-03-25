@@ -239,38 +239,69 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	try {
-		// Try to resolve hero image paths (fallbacks for 404s) before starting slider
-		function resolveHeroImages() {
-			const imgs = document.querySelectorAll('.hero-img');
-			if (!imgs.length) return;
-			const prefixes = ['./ASSETS/Hero/', './ASSETS/hero/', './ASSETS/images/', './ASSETS/HERO/', '/ASSETS/Hero/', 'ASSETS/Hero/'];
-			const exts = ['.jpg', '.jpeg', '.png'];
-			imgs.forEach(img => {
+		// Resolve image paths with fallbacks for both hero and team images
+		function resolveImagePaths() {
+			// Selectors for hero and team images
+			const heroImgs = document.querySelectorAll('.hero-img');
+			const teamImg = document.querySelector('.team-image');
+			const allImgs = Array.from(heroImgs);
+			if (teamImg) allImgs.push(teamImg);
+			if (!allImgs.length) return;
+
+			// Fallback paths: prioritize absolute for production, then relative for local dev
+			const fallbackPaths = {
+				'team-collaboration-DibbwOOP': [
+					'/ASSETS/images/team-collaboration-DibbwOOP.webp',
+					'./ASSETS/images/team-collaboration-DibbwOOP.webp',
+					'/ASSETS/images/team-collaboration-DibbwOOP.jpg',
+					'./ASSETS/images/team-collaboration-DibbwOOP.jpg',
+					'/ASSETS/images/team-collaboration-DibbwOOP.png',
+					'./ASSETS/images/team-collaboration-DibbwOOP.png',
+				],
+				'hero': [
+					'/ASSETS/Hero/',
+					'./ASSETS/Hero/',
+					'/ASSETS/hero/',
+					'./ASSETS/hero/',
+				]
+			};
+
+			allImgs.forEach(img => {
 				const orig = img.getAttribute('src') || '';
 				const file = orig.split('/').pop() || '';
 				const dot = file.lastIndexOf('.');
 				const nameNoExt = dot > 0 ? file.slice(0, dot) : file;
+				const exts = ['.jpg', '.jpeg', '.png', '.webp'];
 				const tries = [];
-				// keep original first
+
+				// Keep original first
 				if (orig) tries.push(orig);
-				prefixes.forEach(p => exts.forEach(e => tries.push(p + nameNoExt + e)));
+
+				// Add fallback paths
+				if (img.classList.contains('hero-img')) {
+					// Hero images: use prefixes + extensions
+					fallbackPaths['hero'].forEach(p => exts.forEach(e => tries.push(p + nameNoExt + e)));
+				} else if (img.classList.contains('team-image')) {
+					// Team image: use predefined fallback paths
+					tries.push(...fallbackPaths['team-collaboration-DibbwOOP']);
+				}
 
 				let attempt = 0;
 				function tryNext() {
 					if (attempt >= tries.length) {
-						console.error('Hero image not found after fallbacks:', file);
+						console.error('Image not found after fallbacks:', file);
 						return;
 					}
 					const url = tries[attempt];
 					img.onerror = () => { attempt++; tryNext(); };
-					img.onload = () => { /* loaded */ };
+					img.onload = () => { console.log('Image loaded:', url); };
 					img.src = url;
 				}
 				tryNext();
 			});
 		}
 
-		resolveHeroImages();
+		resolveImagePaths();
 		initializeHeroSlider();
 	} catch (err) {
 		console.error('Error initializing hero slider:', err);
