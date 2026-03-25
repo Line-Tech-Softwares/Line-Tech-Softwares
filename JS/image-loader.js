@@ -1,12 +1,23 @@
 /**
  * Image Loader Utility
- * Handles image loading for both local development and GitHub Pages deployment
- * Works around LFS issues by providing fallback mechanisms
+ * DISABLED IN PRODUCTION - resolveImagePaths() in index.js handles all image loading
+ * This file is kept for historical purposes but does nothing in production
  */
 
 (function() {
-    // Determine if we're in development or production
+    // Only run in development mode
     const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (!isDev) {
+        // Production: index.js resolveImagePaths() handles all image loading
+        console.log('Image loader disabled in production - using resolveImagePaths() from index.js');
+        return;
+    }
+
+    // DEV MODE ONLY - Keep fallback logic for local testing
+    console.log('Image loader running in development mode');
+    
+    // Determine if we're in development or production
     const isProduction = !isDev && window.location.hostname !== '';
 
     /**
