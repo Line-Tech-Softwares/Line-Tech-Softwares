@@ -5,3 +5,9 @@ sdk-python/__pycache__/
 *.log
 node_modules/
 .DS_Store
+
+# Large binaries - don't commit to GitHub Pages
+ASSETS/APPS/*.exe
+ASSETS/APPS/*.dmg
+ASSETS/APPS/*.AppImage
+*.iso
