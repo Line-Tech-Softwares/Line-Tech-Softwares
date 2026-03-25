@@ -14,24 +14,55 @@
      */
     function fixImages() {
         const images = document.querySelectorAll('img');
-        
+        const altExtensions = ['.jpg', '.jpeg', '.png'];
+
         images.forEach(img => {
             const originalSrc = img.src;
-            
-            // Add error handler for all images
+
+            function getFallbackForPath(src) {
+                try {
+                    const url = new URL(src, window.location.href);
+                    const extMatches = url.pathname.match(/\.(jpg|jpeg|png)$/i);
+                    if (!extMatches) return null;
+                    const currentExt = extMatches[0].toLowerCase();
+                    const basePath = url.pathname.slice(0, -currentExt.length);
+
+                    for (const ext of altExtensions) {
+                        if (ext !== currentExt) {
+                            const candidate = basePath + ext;
+                            if (candidate) return candidate;
+                        }
+                    }
+                } catch (e) {
+                    return null;
+                }
+                return null;
+            }
+
             img.addEventListener('error', function() {
                 console.warn(`Image failed to load: ${originalSrc}`);
-                
-                // If image has a data-fallback attribute, use it
+
                 if (img.getAttribute('data-fallback')) {
                     img.src = img.getAttribute('data-fallback');
-                    console.log(`Using fallback: ${img.getAttribute('data-fallback')}`);
+                    console.log(`Using explicit data-fallback: ${img.src}`);
+                    return;
+                }
+
+                const fallback = getFallbackForPath(img.src);
+                if (fallback && fallback !== img.src && !img.dataset.fallbackTried) {
+                    img.dataset.fallbackTried = 'true';
+                    img.src = fallback;
+                    console.log(`Trying fallback URL: ${fallback}`);
+                    return;
+                }
+
+                if (!isDev) {
+                    img.style.opacity = '0.35';
+                    img.style.filter = 'grayscale(60%)';
                 }
             });
 
-            // If image src is relative and looks like it's pointing to ASSETS, ensure correct path
             if (originalSrc && originalSrc.includes('ASSETS')) {
-                // Already correct - relative path should work
                 console.log(`Image path OK: ${originalSrc}`);
             }
         });
