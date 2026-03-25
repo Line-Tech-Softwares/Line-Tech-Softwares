@@ -248,20 +248,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (teamImg) allImgs.push(teamImg);
 			if (!allImgs.length) return;
 
-			// Fallback paths: prioritize absolute for production, then relative for local dev
+			// Fallback paths: relative paths work best on GitHub Pages with custom domains
 			const fallbackPaths = {
 				'team-collaboration-DibbwOOP': [
-					'/ASSETS/images/team-collaboration-DibbwOOP.webp',
+					'ASSETS/images/team-collaboration-DibbwOOP.webp',
+					'ASSETS/images/team-collaboration-DibbwOOP.jpg',
+					'ASSETS/images/team-collaboration-DibbwOOP.png',
 					'./ASSETS/images/team-collaboration-DibbwOOP.webp',
-					'/ASSETS/images/team-collaboration-DibbwOOP.jpg',
 					'./ASSETS/images/team-collaboration-DibbwOOP.jpg',
-					'/ASSETS/images/team-collaboration-DibbwOOP.png',
 					'./ASSETS/images/team-collaboration-DibbwOOP.png',
 				],
 				'hero': [
-					'/ASSETS/Hero/',
+					'ASSETS/Hero/',
 					'./ASSETS/Hero/',
-					'/ASSETS/hero/',
+					'ASSETS/hero/',
 					'./ASSETS/hero/',
 				]
 			};
