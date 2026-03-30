@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Smart CV Builder - Create Professional CV Online | Line Tech Tools</title>
+    <title>AI CV Builder - Professional Resume Templates | Line Tech Tools</title>
     <meta name="description" content="Create a professional CV online for free. Fill your details, add photo, see live preview, and export as PDF. Perfect for South African job seekers.">
     <meta name="keywords" content="cv builder south africa, resume maker, professional cv, free cv generator, pdf cv">
     <meta name="google-site-verification" content="94CbTFF6oULa7fb5Hh3dz7a5ouk9ZOOmH9UXgm9v3HM" />
@@ -18,6 +18,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
+    <!-- Credits & Utilities -->
+    <script src="../../JS/credits-system.js"></script>
+    <script src="../../JS/pdf-download-manager.js"></script>
+    <script src="../../JS/role-suggestions.js"></script>
+    
     <style>
         /* ===== RESET & BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +35,7 @@
             overflow-x: hidden;
         }
         body.no-scroll { height: 100vh; overflow: hidden; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
 
         /* ===== HEADER STYLES ===== */
         .header {
@@ -77,10 +82,7 @@
             white-space: nowrap;
         }
 
-        .nav-desktop {
-            display: flex;
-            gap: 2rem;
-        }
+        .nav-desktop { display: flex; gap: 2rem; }
         .nav-link {
             color: #e5e7eb;
             text-decoration: none;
@@ -91,18 +93,552 @@
             position: relative;
         }
         .nav-link:hover, .nav-link.active { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #3b82f6;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+
+        /* ===== MAIN LAYOUT ===== */
+        .cv-builder-container {
+            display: grid;
+            grid-template-columns: 350px 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 90px;
+            padding: 2rem;
+            min-height: 100vh;
         }
-        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+        @media (max-width: 1200px) {
+            .cv-builder-container {
+                grid-template-columns: 300px 1fr;
+            }
+            #preview {
+                grid-column: 1 / 3;
+                max-height: 50vh;
+            }
+        }
+        @media (max-width: 768px) {
+            .cv-builder-container {
+                grid-template-columns: 1fr;
+            }
+            #preview { grid-column: 1; }
+        }
+
+        /* ===== SIDEBAR ===== */
+        .control-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .control-panel h3 {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .control-panel h3 i { color: #8b5cf6; }
+
+        /* ===== TEMPLATE SELECTOR ===== */
+        .template-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .template-btn {
+            padding: 0.8rem;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            background: rgba(31, 41, 55, 0.5);
+            color: #ddd;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .template-btn i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            color: #6366f1;
+        }
+        .template-btn:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+        .template-btn.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+
+        /* ===== COLORS & CUSTOMIZATION ===== */
+        .customization-group {
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .custom-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        .color-picker-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .color-dot:hover { border-color: #fff; transform: scale(1.1); }
+        .color-dot.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+
+        /* ===== QUICK ACTIONS ===== */
+        .quick-actions {
+            display: grid;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+        }
+        .quick-btn {
+            padding: 0.6rem 0.8rem;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            color: #3b82f6;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+        .quick-btn:hover {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+        }
+        .quick-btn i { font-size: 0.9rem; }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .form-section h2 {
+            color: #3b82f6;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #e5e7eb;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(31, 41, 55, 1);
+        }
+        textarea { min-height: 70px; resize: vertical; }
+
+        /* ===== SUGGESTION SYSTEM ===== */
+        .suggestion-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 0.8rem;
+            margin-top: -0.8rem;
+            margin-bottom: 0.8rem;
+            display: none;
+        }
+        .suggestion-box.show { display: block; }
+        .suggestion-text {
+            color: #10b981;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0.6rem;
+        }
+        .suggestion-actions {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .suggestion-btn {
+            flex: 1;
+            padding: 0.4rem 0.6rem;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            border-radius: 6px;
+            color: #10b981;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .suggestion-btn:hover {
+            background: rgba(34, 197, 94, 0.4);
+            border-color: #10b981;
+        }
+
+        /* ===== SECTIONS MANAGEMENT ===== */
+        .section-container {
+            background: rgba(31, 41, 55, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .section-header h4 {
+            color: #60a5fa;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .section-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        /* ===== ADD SECTION BUTTON ===== */
+        .add-section-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px dashed rgba(34, 197, 94, 0.5);
+            border-radius: 12px;
+            color: #10b981;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .add-section-btn:hover {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #10b981;
+        }
+
+        /* ===== SECTION PICKER MODAL ===== */
+        .section-picker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .section-picker.show { display: flex; }
+        .section-picker-content {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .section-picker-title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-picker-title i {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #666;
+        } .section-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .section-option {
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .section-option:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        .section-option i {
+            display: block;
+            font-size: 1.8rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        .section-option span {
+            font-size: 0.85rem;
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        /* ===== PREVIEW SECTION ===== */
+        #preview {
+            background: white;
+            color: #1f2937;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-height: 80vh;
+            overflow-y: auto;
+            font-family: 'Calibri', 'Arial', sans-serif;
+        }
+
+        /* ===== TEMPLATE STYLES ===== */
+        .template-corporate {
+            background: white;
+            color: #111;
+        }
+        .template-corporate .cv-header {
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .template-corporate h1 {
+            font-size: 2rem;
+            color: #1e40af;
+            margin-bottom: 0.2rem;
+        }
+        .template-corporate .cv-subtitle {
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .template-minimal {
+            background: white;
+        }
+        .template-minimal .cv-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .template-minimal h1 {
+            font-size: 1.8rem;
+            color: #000;
+            margin-bottom: 0.1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .template-two-column {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            background: white;
+        }
+        .template-two-column .cv-sidebar {
+            background: #1e40af;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        .template-two-column h2 {
+            color: white;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.3rem;
+        }
+
+        .template-creative {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .template-creative .cv-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        #preview h1, #preview h2, #preview h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        #preview h2 {
+            font-size: 1.1rem;
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 0.3rem;
+        }
+        #preview ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        #preview li {
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+        #preview li::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* ===== EXPORT SECTION ===== */
+        .export-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            margin-top: 1rem;
+        }
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .export-btn {
+            padding: 0.8rem 1.2rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+        }
+        .export-btn.secondary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        /* ===== CREDITS & NOTIFICATIONS ===== */
+        .credits-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            background: rgba(59,130,246,0.2);
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(59,130,246,0.4);
+            margin-bottom: 1rem;
+        }
+        .credits-display span {
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 40px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            font-weight: 600;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+    </style>
 
         /* ===== HAMBURGER MENU ===== */
         .hamburger {
@@ -598,7 +1134,24 @@
 
     <div class="tool-container">
         <div class="form-section">
-            <h2><i class="fas fa-user"></i> Personal Details</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="margin: 0;"><i class="fas fa-user"></i> Personal Details</h2>
+                <div style="font-size: 0.9rem; background: rgba(59,130,246,0.2); padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid rgba(59,130,246,0.4);">
+                    <i class="fas fa-bolt"></i> Credits: <span id="credits-remaining" style="color: #3b82f6; font-weight: 600;">10</span>/10
+                </div>
+            </div>
+
+            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                <label>📋 Select Your Role/Profession</label>
+                <select id="role-selector" onchange="applyRoleSuggestions(this.value); updatePreview()" style="margin-top: 0.5rem;">
+                    <option value="">Choose a role for suggestions...</option>
+                </select>
+                <small style="color: #9ca3af; display: block; margin-top: 0.5rem;">
+                    <i class="fas fa-lightbulb"></i> Get AI-suggested titles, skills, and summary for your role!
+                </small>
+            </div>
+
+            <div id="role-suggestions-container"></div>
             
             <div class="photo-upload">
                 <img id="photoPreview" class="photo-preview" src="https://via.placeholder.com/120?text=Photo" alt="Profile Photo">
@@ -611,7 +1164,9 @@
                 <input type="text" id="name" placeholder="John Doe" oninput="updatePreview()">
             </div>
             <div class="form-group">
-                <label>Job Title / Profession</label>
+                <label>Job Title / Profession
+                    <span style="color: #9ca3af; font-size: 0.8rem; font-weight: normal;">(Based on your role selection above)</span>
+                </label>
                 <input type="text" id="title" placeholder="Software Developer" oninput="updatePreview()">
             </div>
             <div class="form-group">
@@ -691,10 +1246,41 @@
         </div>
         
         <div class="export-section">
-            <p class="uses-info"><i class="fas fa-chart-line"></i> Free Export Credits: <span id="uses-left">3</span> remaining | <span id="plan-status">Free Plan</span></p>
-            <button class="export-btn" onclick="exportToPDF()">
-                <i class="fas fa-file-pdf"></i> Download CV as PDF
-            </button>
+            <div style="margin-bottom: 1.5rem; text-align: left; background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong style="color: #3b82f6;">Daily Credits System</strong>
+                        <p style="color: #9ca3af; margin: 0.3rem 0 0 0; font-size: 0.9rem;">
+                            <i class="fas fa-refresh"></i> Resets daily at midnight
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.8rem; font-weight: 700; color: #10b981;">
+                            <span id="credits-display">10</span><span style="font-size: 0.8rem; color: #9ca3af;">/10</span>
+                        </div>
+                        <span id="credits-status" style="font-size: 0.8rem; color: #10b981;">✓ Credits Available</span>
+                    </div>
+                </div>
+                <small style="color: #9ca3af;">
+                    <i class="fas fa-info-circle"></i> Every tool gets 10 free credits daily. Export unlimited CVs within your daily limit!
+                </small>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <button class="export-btn" onclick="exportCVtoPDF()" style="background: linear-gradient(135deg, #10b981, #059669); grid-column: 1 / -1;">
+                    <i class="fas fa-file-pdf"></i> Export CV as PDF
+                </button>
+                <button class="export-btn" onclick="exportCVasImage()" style="background: linear-gradient(135deg, #f59e0b, #d97706); grid-column: 1;">
+                    <i class="fas fa-image"></i> Export as Image
+                </button>
+                <button class="export-btn" onclick="copyToClipboard()" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                    <i class="fas fa-copy"></i> Copy Preview
+                </button>
+            </div>
+            
+            <p style="color: #9ca3af; font-size: 0.9rem; text-align: center;">
+                💡 <strong>Tip:</strong> Mobile users - PDF will download properly! All your data is preserved.
+            </p>
         </div>
     </div>
 
@@ -767,12 +1353,13 @@
         let experiences = [{title: '', company: '', dates: '', desc: ''}];
         let educations = [{degree: '', institution: '', year: ''}];
         
-        function showNotification(msg) {
+        function showNotification(msg, type = 'success') {
             const n = document.createElement('div');
-            n.className = 'notification';
-            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
+            n.className = `notification`;
+            n.style.backgroundColor = type === 'error' ? '#ef4444' : '#22c55e';
+            n.innerHTML = msg;
             document.body.appendChild(n);
-            setTimeout(() => n.remove(), 2500);
+            setTimeout(() => n.remove(), 3000);
         }
         
         function addExperience() {
@@ -868,49 +1455,120 @@
         }
         
         function getUses() {
-            let uses = localStorage.getItem('cvUses');
-            return uses ? parseInt(uses) : 0;
+            return window.creditsManager.getUsedToday();
         }
         
-        function updateUsesDisplay() {
-            const usesLeft = Math.max(0, 3 - getUses());
-            document.getElementById('uses-left').textContent = usesLeft;
-            document.getElementById('plan-status').textContent = getUses() >= 3 ? 'PREMIUM NEEDED' : 'FREE PLAN';
+        function updateCreditsDisplay() {
+            const remaining = window.creditsManager.getRemaining();
+            document.getElementById('credits-remaining').textContent = remaining;
+            document.getElementById('credits-display').textContent = remaining;
+            
+            const statusElem = document.getElementById('credits-status');
+            if (remaining === 0) {
+                statusElem.innerHTML = '❌ Reset Tomorrow';
+                statusElem.style.color = '#ef4444';
+            } else if (remaining <= 3) {
+                statusElem.innerHTML = '⚠️ Low Credits';
+                statusElem.style.color = '#f59e0b';
+            } else {
+                statusElem.innerHTML = '✓ Credits Available';
+                statusElem.style.color = '#10b981';
+            }
         }
         
-        async function exportToPDF() {
-            const uses = getUses();
-            if(uses >= 3) {
-                showNotification('Free uses exhausted! Upgrade to continue.');
+        async function exportCVtoPDF() {
+            // Check credits
+            if (!window.creditsManager.hasCredits(1)) {
+                showNotification('❌ No credits available! Reset tomorrow at midnight.', 'error');
                 return;
             }
             
-            const element = document.getElementById('preview');
-            const originalWidth = element.style.width;
-            element.style.width = '800px';
+            // Validate data
+            if (!document.getElementById('name').value.trim()) {
+                showNotification('❌ Please enter your name', 'error');
+                return;
+            }
             
             try {
-                const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff' });
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 190;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                pdf.save(document.getElementById('name').value.replace(/[^a-z0-9]/gi, '_') + '_CV.pdf');
+                const element = document.getElementById('preview');
+                const success = await window.pdfDownloadManager.downloadPDF(
+                    element,
+                    (document.getElementById('name').value || 'CV').replace(/[^a-z0-9]/gi, '_') + '.pdf'
+                );
                 
-                localStorage.setItem('cvUses', uses + 1);
-                updateUsesDisplay();
-                showNotification('CV exported successfully!');
+                if (success) {
+                    // Use credit only on success
+                    window.creditsManager.useCredits(1);
+                    updateCreditsDisplay();
+                    showNotification('✅ CV downloaded successfully!', 'success');
+                } else {
+                    showNotification('❌ Download failed. Try saving as image instead.', 'error');
+                }
             } catch(err) {
-                showNotification('Error generating PDF. Please try again.');
-            } finally {
-                element.style.width = originalWidth;
+                console.error('Export error:', err);
+                showNotification('❌ Error exporting CV. Please try again.', 'error');
             }
         }
         
-        updatePreview();
-        updateUsesDisplay();
+        async function exportCVasImage() {
+            if (!window.creditsManager.hasCredits(1)) {
+                showNotification('❌ No credits available! Reset tomorrow at midnight.', 'error');
+                return;
+            }
+            
+            try {
+                const element = document.getElementById('preview');
+                const success = await window.pdfDownloadManager.downloadAsImage(
+                    element,
+                    (document.getElementById('name').value || 'CV') + '.png'
+                );
+                
+                if (success) {
+                    window.creditsManager.useCredits(1);
+                    updateCreditsDisplay();
+                    showNotification('✅ CV exported as image!', 'success');
+                } else {
+                    showNotification('❌ Export failed. Please try again.', 'error');
+                }
+            } catch(err) {
+                console.error('Export error:', err);
+                showNotification('❌ Error exporting CV', 'error');
+            }
+        }
+        
+        function copyToClipboard() {
+            const preview = document.getElementById('preview');
+            const range = document.createRange();
+            range.selectNodeContents(preview);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                showNotification('✅ CV preview copied to clipboard!', 'success');
+            } catch(err) {
+                showNotification('❌ Copy failed. Try exporting instead.', 'error');
+            }
+        }
+        
+        async function exportToPDF() {
+            // Legacy function for backwards compatibility
+            await exportCVtoPDF();
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            updateCreditsDisplay();
+            
+            // Initialize role suggestions
+            initializeRoleSelector('role-selector', (suggestions) => {
+                console.log('Role selected:', suggestions);
+            });
+            
+            // Auto-update credits display every minute
+            setInterval(updateCreditsDisplay, 60000);
+        });
         
         window.addExperience = addExperience;
         window.removeExperience = removeExperience;
@@ -918,6 +1576,9 @@
         window.removeEducation = removeEducation;
         window.updatePreview = updatePreview;
         window.exportToPDF = exportToPDF;
+        window.exportCVtoPDF = exportCVtoPDF;
+        window.exportCVasImage = exportCVasImage;
+        window.copyToClipboard = copyToClipboard;
     </script>
 </body>
 </html>
