@@ -1199,6 +1199,25 @@ section {
     opacity: 0.9;
 }
 
+.clients-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.client-logo {
+    max-height: 100px;   /* changed from 60px to 100px */
+    width: auto;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+a:hover .client-logo {
+    opacity: 0.8;
+}
+
 /* Contact Info */
 .contact-info {
     display: flex;

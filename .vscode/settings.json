@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"c:\\\\LTS OFFICIAL WEBSITE\"; git push$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
