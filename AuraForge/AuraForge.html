@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraForge • Forge Your Focus</title>
+    <link rel="stylesheet" href="AuraForge.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-fire-flame-curved flame-icon"></i>
+                <span>AuraForge</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Product <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="#features">Features</a>
+                            <a href="#aura-system">Aura System</a>
+                            <a href="#goals">Goal Tracking</a>
+                            <a href="#tasks">Tasks</a>
+                            <a href="#journal">Journaling</a>
+                            <a href="#planning">Planning</a>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Learn <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="#how-it-works">How Aura Works</a>
+                            <a href="#productivity-science">Productivity Science</a>
+                            <a href="#streaks">Streaks</a>
+                            <a href="#burnout">Burnout Recovery</a>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Community <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="#testimonials">Testimonials</a>
+                            <a href="#success">Success Stories</a>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Support <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="#faq">FAQ</a>
+                            <a href="#contact">Contact</a>
+                            <a href="#donations">Donations</a>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#download" class="nav-link download-btn">Download</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        
+        <div class="mobile-menu">
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#aura-system">Aura System</a></li>
+                <li><a href="#goals">Goals</a></li>
+                <li><a href="#tasks">Tasks</a></li>
+                <li><a href="#journal">Journal</a></li>
+                <li><a href="#planning">Planning</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#donations">Donations</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="hero" class="hero">
+        <div class="flame-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Forge Your Focus</h1>
+                <p class="hero-subtitle">Turn goals into momentum.<br>Build discipline.<br><span class="highlight">Burn brighter every day.</span></p>
+                
+                <div class="hero-buttons">
+                    <button onclick="downloadApp()" class="btn-primary">
+                        <i class="fas fa-download"></i> Download for Windows
+                    </button>
+                    <button onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})" class="btn-secondary">
+                        Explore Features
+                    </button>
+                </div>
+                
+                <div class="trust-badges">
+                    <div>Free Forever</div>
+                    <div>No Ads • No Subscriptions</div>
+                </div>
+            </div>
+            
+            <div class="hero-mockup">
+                <div class="app-window">
+                    <div class="app-header">
+                        <div class="app-dots"></div>
+                        <br> <br>
+                        <span>AuraForge</span>
+                       
+                    </div>
+                    <img src="auraforge.png" alt="AuraForge App Screenshot" class="mockup-img">
+                   
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- WHAT IS AURAFORGE -->
+    <section id="what-is" class="section">
+        <div class="section-header">
+            <h2>What is AuraForge?</h2>
+            <p class="section-sub">A beautiful desktop productivity forge for those who refuse to stay average.</p>
+        </div>
+        
+        <div class="content-grid">
+            <div class="text-content">
+                <p>AuraForge is a premium desktop application designed to help you build unbreakable discipline, maintain laser focus, and transform your intentions into consistent action.</p>
+                <p>Originally created by founder Kabelo Kgosana as a personal tool during a period of burnout and scattered focus, AuraForge evolved from a private habit tracker into a complete productivity ecosystem.</p>
+                
+                <div class="mission-vision">
+                    <div class="card glass">
+                        <h3>Mission</h3>
+                        <p>To empower individuals to reclaim their attention and build a life of purposeful momentum.</p>
+                    </div>
+                    <div class="card glass">
+                        <h3>Vision</h3>
+                        <p>A world where every person has the tools to evolve their focus and achieve their highest potential.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="values">
+                <h3>Core Values</h3>
+                <ul class="values-list">
+                    <li><i class="fas fa-fire flame"></i> Discipline over Motivation</li>
+                    <li><i class="fas fa-fire flame"></i> Consistency Compounds</li>
+                    <li><i class="fas fa-fire flame"></i> Radical Accountability</li>
+                    <li><i class="fas fa-fire flame"></i> Beauty in Simplicity</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL LIFE USE CASES -->
+    <section id="use-cases" class="section bg-dark">
+        <div class="section-header">
+            <h2>How It Helps In Real Life</h2>
+            <p class="section-sub">Built for humans with real ambitions.</p>
+        </div>
+        
+        <div class="use-case-grid">
+            <div class="use-card glass">
+                <div class="use-icon"><i class="fas fa-user-graduate"></i></div>
+                <h3>Students</h3>
+                <ul>
+                    <li>Assignment tracking with smart deadlines</li>
+                    <li>Study schedule optimization</li>
+                    <li>Exam preparation streaks</li>
+                </ul>
+            </div>
+            <div class="use-card glass">
+                <div class="use-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Developers</h3>
+                <ul>
+                    <li>Project roadmaps</li>
+                    <li>Feature sprint planning</li>
+                    <li>Deep work timer integration</li>
+                </ul>
+            </div>
+            <div class="use-card glass">
+                <div class="use-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Entrepreneurs</h3>
+                <ul>
+                    <li>Business milestone tracking</li>
+                    <li>Revenue goal visualization</li>
+                    <li>Team accountability tools</li>
+                </ul>
+            </div>
+            <div class="use-card glass">
+                <div class="use-icon"><i class="fas fa-dumbbell"></i></div>
+                <h3>Gym Warriors</h3>
+                <ul>
+                    <li>Workout progression logs</li>
+                    <li>PR streak tracking</li>
+                    <li>Recovery &amp; consistency</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="section">
+        <div class="section-header">
+            <h2>Powerful Features</h2>
+            <p class="section-sub">Everything you need to build a focused life.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card glass" onclick="showFeatureModal(0)">
+                <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Goals System</h3>
+                <p>Long-term and short-term goals with visual progress flames.</p>
+            </div>
+            <div class="feature-card glass" onclick="showFeatureModal(1)">
+                <div class="card-icon"><i class="fas fa-tasks"></i></div>
+                <h3>Tasks &amp; Deadlines</h3>
+                <p>Smart task management with Aura rewards and penalties.</p>
+            </div>
+            <div class="feature-card glass" onclick="showFeatureModal(2)">
+                <div class="card-icon"><i class="fas fa-star"></i></div>
+                <h3>Aura System</h3>
+                <p>Your focus currency. Grow it. Protect it. Evolve it.</p>
+            </div>
+            <div class="feature-card glass" onclick="showFeatureModal(3)">
+                <div class="card-icon"><i class="fas fa-fire"></i></div>
+                <h3>Streak Tracking</h3>
+                <p>Never break the chain. Watch your flames grow.</p>
+            </div>
+            <div class="feature-card glass" onclick="showFeatureModal(4)">
+                <div class="card-icon"><i class="fas fa-book"></i></div>
+                <h3>Private Journal</h3>
+                <p>Password-protected entries with mood analytics.</p>
+            </div>
+            <div class="feature-card glass" onclick="showFeatureModal(5)">
+                <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3>Visual Planning</h3>
+                <p>Weekly, daily, and time-block planners. Export ready.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AURA SYSTEM -->
+    <section id="aura-system" class="section bg-dark">
+        <div class="section-header">
+            <h2>The Aura System</h2>
+            <p class="section-sub">Your living focus score.</p>
+        </div>
+        
+        <div class="aura-explain">
+            <div class="aura-start">
+                <h3>Start with 50 Aura</h3>
+                <p class="flame-text">Every action either fuels your flame or dims it.</p>
+            </div>
+            
+            <div class="aura-grid">
+                <div class="aura-level">
+                    <div class="level-flame"><i class="fas fa-fire"></i></div>
+                    <strong>Burnt Ember</strong>
+                    <span>0-30</span>
+                </div>
+                <div class="aura-level">
+                    <div class="level-flame"><i class="fas fa-fire-flame-simple"></i></div>
+                    <strong>Weak Flame</strong>
+                    <span>31-70</span>
+                </div>
+                <div class="aura-level active">
+                    <div class="level-flame"><i class="fas fa-fire"></i></div>
+                    <strong>Focused Flame</strong>
+                    <span>71-150</span>
+                </div>
+                <div class="aura-level">
+                    <div class="level-flame"><i class="fas fa-fire"></i></div>
+                    <strong>Blazing Flame</strong>
+                    <span>151-300</span>
+                </div>
+                <div class="aura-level">
+                    <div class="level-flame"><i class="fas fa-meteor"></i></div>
+                    <strong>Inferno</strong>
+                    <span>301+</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GOALS -->
+    <section id="goals" class="section">
+        <div class="section-header">
+            <h2>Goals That Matter</h2>
+        </div>
+        <div class="two-col">
+            <div class="col">
+                <h3>Long-Term Goals</h3>
+                <p>Measured in years. Visualized as evolving flames.</p>
+                <img src="https://picsum.photos/id/201/600/350" alt="Goals Screenshot" class="placeholder-img">
+            </div>
+            <div class="col">
+                <h3>Short-Term Milestones</h3>
+                <p>Monthly targets that feed your Aura.</p>
+                <img src="https://picsum.photos/id/237/600/350" alt="Milestones Screenshot" class="placeholder-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="section bg-dark">
+        <div class="section-header">
+            <h2>Real People, Real Momentum</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial glass">
+                <p>"AuraForge completely changed how I approach my day. My streaks are at 87 days and my Aura is higher than ever."</p>
+                <div class="author">- Sarah K., Software Engineer</div>
+            </div>
+            <div class="testimonial glass">
+                <p>"The risk/reward system with Aura actually makes me excited to finish tasks. Best productivity app I've ever used."</p>
+                <div class="author">- Marcus T., Founder</div>
+            </div>
+            <div class="testimonial glass">
+                <p>"Finally a journal that feels private and powerful. The mood analytics are eye-opening."</p>
+                <div class="author">- Priya M., University Student</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DONATIONS -->
+    <section id="donations" class="section">
+        <div class="section-header">
+            <h2>Support the Forge</h2>
+            <p class="section-sub">AuraForge is and always will be completely free.</p>
+        </div>
+        
+        <div class="donation-tiers">
+            <div class="tier glass" onclick="fakeDonate('Supporter')">
+                <h3>Supporter</h3>
+                <div class="price">$5 / month</div>
+                <ul>
+                    <li>Thank you badge in app</li>
+                    <li>Early feature previews</li>
+                </ul>
+            </div>
+            <div class="tier glass featured" onclick="fakeDonate('Builder')">
+                <h3>Builder</h3>
+                <div class="price">$15 / month</div>
+                <ul>
+                    <li>Custom flame themes</li>
+                    <li>Priority support</li>
+                    <li>Name in credits</li>
+                </ul>
+            </div>
+            <div class="tier glass" onclick="fakeDonate('Forge Master')">
+                <h3>Forge Master</h3>
+                <div class="price">$50 / month</div>
+                <ul>
+                    <li>Everything above</li>
+                    <li>Personal 1:1 onboarding</li>
+                    <li>Influence roadmap</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button onclick="fakeDonate('one-time')" class="btn-primary">Make One-Time Donation</button>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section bg-dark">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-container" id="faqContainer"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+        <div class="section-header">
+            <h2>Get In Touch</h2>
+        </div>
+        <div class="contact-form-container">
+            <form id="contactForm" class="contact-form">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="text" id="subject" placeholder="Subject" required>
+                <textarea id="message" placeholder="Your Message" rows="6" required></textarea>
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="logo">
+                    <i class="fas fa-fire-flame-curved flame-icon"></i>
+                    <span>AuraForge</span>
+                </div>
+                <p>Forge your focus.<br>Burn brighter.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+                <a href="#" onclick="showPage('terms')">Terms of Service</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#aura-system">Aura System</a>
+                <a href="#download">Download</a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="#">Discord</a>
+                <a href="#">Twitter</a>
+                <a href="#">Reddit</a>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2026 Line Tech Softwares • All Rights Reserved
+        </div>
+    </footer>
+
+    <!-- FEATURE MODAL -->
+    <div id="featureModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- PAGE MODAL -->
+    <div id="pageModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="page-content"></div>
+        </div>
+    </div>
+
+    <button onclick="scrollToTop()" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="AuraForge.js"></script>
+</body>
+</html>
