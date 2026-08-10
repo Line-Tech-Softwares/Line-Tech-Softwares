@@ -7,6 +7,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Instantly clean '.html' from the URL without triggering a page reload
     cleanUrlPath();
+  wireDownloadButtons();
 });
 
 /**
@@ -129,7 +130,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // App Download Action
 function downloadApp() {
-  alert("Downloading AuraForge for Windows... Your setup file will begin shortly.");
+  // legacy fallback — open download modal for platform choices
+  showDownloadOptions();
+}
+
+// Wire header and modal download buttons
+function wireDownloadButtons() {
+  const headerBtn = document.getElementById('headerDownloadBtn');
+  if (headerBtn) headerBtn.addEventListener('click', showDownloadOptions);
+
+  const winBtn = document.getElementById('winDownload');
+  const linuxBtn = document.getElementById('linuxDownload');
+
+    if (winBtn) {
+    winBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // link directly to the distributed Windows installer inside the Dist folder
+      const url = encodeURI('Dist/AuraForge Setup 0.1.0.exe');
+      window.location.href = url;
+    });
+  }
+
+  if (linuxBtn) {
+    linuxBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = '/downloads/AuraForge-1.0.AppImage';
+      window.location.href = url;
+    });
+  }
+
+  const bugForm = document.getElementById('bugReportForm');
+  if (bugForm) {
+    bugForm.addEventListener('submit', (e) => {
+      // let form submit to web3forms; show a quick client-side acknowledgement
+      setTimeout(() => {
+        alert('Thanks — bug report submitted. We appreciate the details.');
+        bugForm.reset();
+      }, 300);
+    });
+  }
+}
+
+// Show download modal with platform choices and mobile handling
+function showDownloadOptions() {
+  const isMobile = /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent) || window.innerWidth < 900;
+  const modal = document.getElementById('downloadModal');
+  const downloadNote = document.getElementById('downloadNote');
+  if (!modal) return;
+
+  if (isMobile) {
+    // on mobile/tablet, disable downloads and show note
+    downloadNote.style.display = 'block';
+    document.getElementById('winDownload').style.pointerEvents = 'none';
+    document.getElementById('linuxDownload').style.pointerEvents = 'none';
+    document.getElementById('winDownload').style.opacity = '0.6';
+    document.getElementById('linuxDownload').style.opacity = '0.6';
+  } else {
+    downloadNote.style.display = 'none';
+    document.getElementById('winDownload').style.pointerEvents = '';
+    document.getElementById('linuxDownload').style.pointerEvents = '';
+    document.getElementById('winDownload').style.opacity = '';
+    document.getElementById('linuxDownload').style.opacity = '';
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeDownloadModal() {
+  const modal = document.getElementById('downloadModal');
+  if (modal) modal.style.display = 'none';
 }
 
 // Display Feature Details Modal
@@ -188,6 +257,8 @@ function scrollToTop() {
 window.onclick = function (event) {
   const featureModal = document.getElementById("featureModal");
   const pageModal = document.getElementById("pageModal");
+  const downloadModal = document.getElementById("downloadModal");
   if (event.target === featureModal) featureModal.style.display = "none";
   if (event.target === pageModal) pageModal.style.display = "none";
+  if (downloadModal && event.target === downloadModal) downloadModal.style.display = "none";
 };

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraForge • Forge Your Focus</title>
     <link rel="stylesheet" href="AuraForge.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -58,7 +59,7 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a href="#download" class="nav-link download-btn">Download</a>
+                        <button class="nav-link download-btn" id="headerDownloadBtn">Download <i class="fas fa-chevron-down"></i></button>
                     </li>
                 </ul>
             </nav>
@@ -93,8 +94,8 @@
                 <p class="hero-subtitle">Turn goals into momentum.<br>Build discipline.<br><span class="highlight">Burn brighter every day.</span></p>
                 
                 <div class="hero-buttons">
-                    <button onclick="downloadApp()" class="btn-primary">
-                        <i class="fas fa-download"></i> Download for Windows
+                    <button onclick="showDownloadOptions()" class="btn-primary">
+                        <i class="fas fa-download"></i> Download
                     </button>
                     <button onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})" class="btn-secondary">
                         Explore Features
@@ -123,6 +124,28 @@
         
         <div class="scroll-indicator">
             <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- NO BS -->
+    <section id="no-bs" class="section">
+        <div class="section-header">
+            <h2>Quit the Excuses</h2>
+            <p class="section-sub">Cut the fluff — this is about results, not comfort.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p style="font-weight:700; font-size:1.05rem; color:var(--text-main)">Stop blaming tools, environments, or "not enough time." Build one real habit today — then another. If you're waiting for motivation, that's the problem, not the app.</p>
+                <p class="text-muted">No gimmicks. No quick fixes. We call out BS because honesty is the fastest path to change.</p>
+            </div>
+            <div class="values">
+                <h3>We Mean It</h3>
+                <ul class="values-list">
+                    <li><i class="fas fa-bullhorn"></i> Own your choices</li>
+                    <li><i class="fas fa-check-circle"></i> Ship imperfect work</li>
+                    <li><i class="fas fa-calendar-day"></i> Show up daily</li>
+                </ul>
+            </div>
         </div>
     </section>
 
@@ -301,13 +324,125 @@
         <div class="two-col">
             <div class="col">
                 <h3>Long-Term Goals</h3>
-                <p>Measured in years. Visualized as evolving flames.</p>
-                <img src="https://picsum.photos/id/201/600/350" alt="Goals Screenshot" class="placeholder-img">
+                <p>Measured in years. Visualised as evolving flames.</p>
+                <img src='https://media.istockphoto.com/id/2151217641/photo/concept-of-achieving-goals-planning-and-stages-orange-thread-pins-and-flag.jpg?b=1&s=612x612&w=0&k=20&c=kmwGc5vMVP8ZNyJ9JQZ7Pv-G8xxSnrgGqWvydYirE2M=' alt="Goals Screenshot" class="placeholder-img">
             </div>
             <div class="col">
                 <h3>Short-Term Milestones</h3>
                 <p>Monthly targets that feed your Aura.</p>
-                <img src="https://picsum.photos/id/237/600/350" alt="Milestones Screenshot" class="placeholder-img">
+                <img src="https://images.pexels.com/photos/29509460/pexels-photo-29509460.jpeg" alt="Milestones Screenshot" class="placeholder-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="section bg-dark">
+        <div class="section-header">
+            <h2>Tasks</h2>
+            <p class="section-sub">Smart lists, priorities and Aura-weighted deadlines.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>Create projects, break them into tasks, set Aura rewards and penalties, and let the system help you prioritise what actually moves the needle.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section id="journal" class="section">
+        <div class="section-header">
+            <h2>Journal</h2>
+            <p class="section-sub">Private, encrypted reflections with mood analytics.</p>
+        </div>
+        <div class="two-col">
+            <div class="col">
+                <p>Your entries are stored locally and encrypted before save. Use quick prompts to reflect and keep track of mental load.</p>
+            </div>
+            <div class="col">
+                <p>Export or delete your journal anytime — privacy-first by design.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLANNING -->
+    <section id="planning" class="section bg-dark">
+        <div class="section-header">
+            <h2>Planning</h2>
+            <p class="section-sub">Visual, exportable planning to keep weeks and months aligned.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>Weekly and monthly planners with time-blocking and quick export to PDF or iCal. Plan in public, execute in private.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="section">
+        <div class="section-header">
+            <h2>How Aura Works</h2>
+            <p class="section-sub">A short explainer of core mechanics.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>AuraForge converts daily actions into Aura points, using a feedback loop to encourage consistency while penalising distraction.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTIVITY SCIENCE -->
+    <section id="productivity-science" class="section bg-dark">
+        <div class="section-header">
+            <h2>Productivity Science</h2>
+            <p class="section-sub">Evidence-based practices that power AuraForge.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>We use techniques from deep work, habit formation, and cognitive load theory to make progress measurable and repeatable.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STREAKS -->
+    <section id="streaks" class="section">
+        <div class="section-header">
+            <h2>Streaks</h2>
+            <p class="section-sub">Small daily wins lead to major long-term gains.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>Track habits, set flexible streak rules, and celebrate milestones with exclusive flame effects.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BURNOUT -->
+    <section id="burnout" class="section bg-dark">
+        <div class="section-header">
+            <h2>Burnout Recovery</h2>
+            <p class="section-sub">Tools to recover, rebuild, and return stronger.</p>
+        </div>
+        <div class="content-grid">
+            <div class="text-content">
+                <p>Guided recovery modes, reduced-output templates, and gradual ramp-up schedules to protect your energy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUCCESS STORIES -->
+    <section id="success" class="section">
+        <div class="section-header">
+            <h2>Success Stories</h2>
+            <p class="section-sub">Real results from real users.</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial glass">
+                <p>"I turned my vague goals into a 12-month plan and actually shipped my side project."</p>
+                <div class="author">- Alex R.</div>
+            </div>
+            <div class="testimonial glass">
+                <p>"AuraForge held me accountable when everything else failed."</p>
+                <div class="author">- Mina Y.</div>
             </div>
         </div>
     </section>
@@ -375,6 +510,25 @@
     </section>
 
     <!-- FAQ -->
+    <!-- CONTACT / BUG REPORT -->
+    <section id="contact" class="section">
+        <div class="section-header">
+            <h2>Report a Bug</h2>
+            <p class="section-sub">Found something off? Tell us exactly what went wrong.</p>
+        </div>
+
+        <div class="contact-form-container">
+            <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="bugReportForm">
+                <input type="hidden" name="access_key" value="d4989720-58c4-473b-bedb-cf0648a3e2ea">
+                <input type="text" name="name" placeholder="Your name" required>
+                <input type="email" name="email" placeholder="Your email" required>
+                <textarea name="message" placeholder="Describe the bug, steps to reproduce, and any screenshots/links" required></textarea>
+                <button type="submit" class="btn-primary">Submit Bug Report</button>
+            </form>
+        </div>
+    </section>
+
+
     <section id="faq" class="section bg-dark">
         <div class="section-header">
             <h2>Frequently Asked Questions</h2>
@@ -382,21 +536,7 @@
         <div class="faq-container" id="faqContainer"></div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-        <div class="section-header">
-            <h2>Get In Touch</h2>
-        </div>
-        <div class="contact-form-container">
-            <form id="contactForm" class="contact-form">
-                <input type="text" id="name" placeholder="Your Name" required>
-                <input type="email" id="email" placeholder="Email Address" required>
-                <input type="text" id="subject" placeholder="Subject" required>
-                <textarea id="message" placeholder="Your Message" rows="6" required></textarea>
-                <button type="submit" class="btn-primary">Send Message</button>
-            </form>
-        </div>
-    </section>
+
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -441,6 +581,20 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- DOWNLOAD MODAL -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDownloadModal()">&times;</span>
+            <h2 style="color:var(--primary-orange); margin-bottom:1rem;">Download AuraForge</h2>
+            <p style="color:var(--text-muted); margin-bottom:1rem;">Choose your platform to download the native desktop installer.</p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <a id="winDownload" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.6rem;"><i class="fab fa-windows"></i> Windows</a>
+                <a id="linuxDownload" class="btn-secondary" style="display:inline-flex; align-items:center; gap:0.6rem;"><i class="fab fa-linux"></i> Linux</a>
+            </div>
+            <p id="downloadNote" style="color:var(--text-muted); margin-top:1rem; display:none;">You need to be on a laptop/pc to be able to use this program.</p>
         </div>
     </div>
 

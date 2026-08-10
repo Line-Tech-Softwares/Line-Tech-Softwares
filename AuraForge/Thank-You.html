@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thanks — AuraForge Supporter</title>
+    <link rel="stylesheet" href="AuraForge.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF5E1A;
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --bg-card: rgba(18, 22, 32, 0.75);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --aura-blue: #38BDF8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            padding: 1.5rem; 
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #071018 0%, #0b0e14 60%); 
+            color: var(--text-main);
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .card { 
+            max-width: 640px; 
+            width: 100%; 
+            padding: 2.5rem; 
+            border-radius: 16px; 
+            text-align: center; 
+            border: 1px solid var(--border-card); 
+            background: var(--bg-card); 
+            backdrop-filter: blur(12px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+
+        .icon-header {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+
+        .big { 
+            font-size: 1.75rem; 
+            font-weight: 800; 
+            line-height: 1.3;
+            color: var(--primary-orange); 
+        }
+
+        .sub { 
+            color: var(--text-muted); 
+            margin-top: 0.5rem; 
+            font-size: 0.95rem;
+        }
+
+        .suggest-form { 
+            margin-top: 1.5rem; 
+            display: grid; 
+            gap: 0.8rem; 
+            text-align: left;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-card);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-orange);
+        }
+
+        .action-group {
+            display: flex; 
+            gap: 0.75rem; 
+            justify-content: center; 
+            margin-top: 0.5rem; 
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-orange);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-card);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            opacity: 0.9;
+        }
+
+        .form-disclaimer {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-disclaimer i.fa-circle-check {
+            color: var(--aura-blue);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+
+    <main class="card glass">
+        <div class="icon-header">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+        <h1 class="big">Thank you — you just helped keep AuraForge free.</h1>
+        <p class="sub">Your support matters. We built this for people who get things done.</p>
+
+        <p style="font-size: 0.9rem; color: var(--text-main); margin-top: 1.5rem;">
+            Want to shape the product? Suggest a feature below — we read every submission.
+        </p>
+
+        <form action="https://api.web3forms.com/submit" method="POST" class="suggest-form">
+            <!-- Hidden API Key for submission processing -->
+            <input type="hidden" name="access_key" value="d4989720-58c4-473b-bedb-cf0648a3e2ea">
+            
+            <input type="text" name="name" class="input-field" placeholder="Your name (optional)" aria-label="Your name">
+            <input type="email" name="email" class="input-field" placeholder="Your email (optional)" aria-label="Your email">
+            <textarea name="message" class="input-field" placeholder="Describe the feature, why it matters, and who benefits..." required rows="4" aria-label="Feature description"></textarea>
+            
+            <div class="action-group">
+                <button type="submit" class="btn-primary">
+                    <i class="fa-solid fa-paper-plane"></i> Suggest Feature
+                </button>
+                <a href="AuraForge.html" class="btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back to AuraForge
+                </a>
+            </div>
+        </form>
+
+        <p class="form-disclaimer">
+            Please note: Not all suggestions will make it through. Should your suggestion be selected, you will be awarded a blue tick <i class="fa-solid fa-circle-check"></i>, <strong>+1,500 Aura</strong>, and possibly have the feature named after you.
+        </p>
+    </main>
+
+    <script>
+        // Lightweight Canvas Confetti
+        (function() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const colors = ['#FF5E1A', '#FF9E1B', '#FFD27A', '#9BE8D2', '#8AB4FF'];
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height - height,
+                size: Math.random() * 8 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speedY: Math.random() * 2 + 1.5,
+                speedX: Math.random() * 1 - 0.5,
+                rotation: Math.random() * 360,
+                rotSpeed: Math.random() * 4 - 2
+            }));
+
+            let animationFrame;
+            function render() {
+                ctx.clearRect(0, 0, width, height);
+                let activeParticles = 0;
+
+                particles.forEach(p => {
+                    if (p.y < height) {
+                        activeParticles++;
+                        p.y += p.speedY;
+                        p.x += p.speedX;
+                        p.rotation += p.rotSpeed;
+
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate((p.rotation * Math.PI) / 180);
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                        ctx.restore();
+                    }
+                });
+
+                if (activeParticles > 0) {
+                    animationFrame = requestAnimationFrame(render);
+                } else {
+                    cancelAnimationFrame(animationFrame);
+                }
+            }
+
+            render();
+        })();
+    </script>
+    <script src="AuraForge.js"></script>
+</body>
+</html>

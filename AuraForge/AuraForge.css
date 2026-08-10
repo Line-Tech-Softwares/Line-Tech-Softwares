@@ -19,7 +19,7 @@
   --border-light: rgba(255, 255, 255, 0.08);
   --border-glow: rgba(255, 94, 26, 0.3);
   
-  --font-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-base: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
