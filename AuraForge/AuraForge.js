@@ -146,7 +146,7 @@ function wireDownloadButtons() {
     winBtn.addEventListener('click', (e) => {
       e.preventDefault();
       // link directly to the distributed Windows installer inside the Dist folder
-      const url = encodeURI('Dist/AuraForge Setup 0.1.0.exe');
+      const url = encodeURI('Dist/AuraForge Setup 0.1.1.exe');
       window.location.href = url;
     });
   }
