@@ -1,8 +1,8 @@
-version: 1.1.0
+version: 1.1.1
 files:
-  - url: AuraForge Setup 1.1.0.exe
-    sha512: cnk/6eZw1yOot5QF763aTYBW2JFz1HX7Y8et1PXHQpmJ2RMQdDVftCEOiIV13CuO6H8cR1NLI4UhdR+uJEbUdg==
-    size: 102132287
-path: AuraForge Setup 1.1.0.exe
-sha512: cnk/6eZw1yOot5QF763aTYBW2JFz1HX7Y8et1PXHQpmJ2RMQdDVftCEOiIV13CuO6H8cR1NLI4UhdR+uJEbUdg==
-releaseDate: '2026-09-07T21:47:48.906Z'
+  - url: AuraForge Setup 1.1.1.exe
+    sha512: Ct9trwIL0JRy0nfh7hTwpdspDeX/RvkYlzQCGuYzpT+EGmS8GlEKnFeMEFUeCAaqK/phNV6OwJG5Jw8zRcWtyA==
+    size: 102132366
+path: AuraForge Setup 1.1.1.exe
+sha512: Ct9trwIL0JRy0nfh7hTwpdspDeX/RvkYlzQCGuYzpT+EGmS8GlEKnFeMEFUeCAaqK/phNV6OwJG5Jw8zRcWtyA==
+releaseDate: '2026-09-07T22:35:50.957Z'
