@@ -154,7 +154,7 @@ function wireDownloadButtons() {
   if (linuxBtn) {
     linuxBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const url = '/Dist/auraforge';
+      const url = 'Dist/auraforge';
       window.location.href = url;
     });
   }
