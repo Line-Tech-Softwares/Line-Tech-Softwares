@@ -145,8 +145,7 @@ function wireDownloadButtons() {
     if (winBtn) {
     winBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      // link directly to the distributed Windows installer inside the Dist folder
-      const url = encodeURI('Dist/AuraForge Setup 1.1.2.exe');
+      const url = 'https://raw.githubusercontent.com/Line-Tech-Softwares/Line-Tech-Softwares/main/AuraForge/Dist/AuraForge%20Setup%201.1.2.exe';
       window.location.href = url;
     });
   }
