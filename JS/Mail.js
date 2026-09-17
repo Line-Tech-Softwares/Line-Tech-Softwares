@@ -75,8 +75,8 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    if (!/(?:@gmail\.com|@icloud\.com)$/i.test(email)) {
-        warningText.textContent = "Please use a Gmail or iCloud email only.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        warningText.textContent = "Please enter a valid email address.";
         warningMessage.style.display = "block";
         return;
     }
