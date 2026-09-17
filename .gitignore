@@ -12,5 +12,3 @@ ASSETS/APPS/*.dmg
 ASSETS/APPS/*.AppImage
 *.iso
 
-# Generated AuraForge executable
-AuraForge/Dist/auraforge

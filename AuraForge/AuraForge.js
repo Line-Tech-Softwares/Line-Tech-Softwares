@@ -154,7 +154,7 @@ function wireDownloadButtons() {
   if (linuxBtn) {
     linuxBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const url = 'Dist/auraforge';
+      const url = 'https://media.githubusercontent.com/media/Line-Tech-Softwares/Line-Tech-Softwares/main/AuraForge/Dist/auraforge';
       window.location.href = url;
     });
   }

@@ -1,3 +1,4 @@
 # Images are now stored as regular files instead of using Git LFS
 # This ensures they deploy properly in production environments
 # For very large assets, consider using a CDN instead
+AuraForge/Dist/auraforge filter=lfs diff=lfs merge=lfs -text
