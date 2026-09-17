@@ -12,7 +12,7 @@
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(59, 130, 246, 0.3);
   padding: 1.5rem;
-  z-index: 999;
+  z-index: 10000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,6 +54,8 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  position: relative;
+  z-index: 1;
 }
 
 #cookie-accept:hover {

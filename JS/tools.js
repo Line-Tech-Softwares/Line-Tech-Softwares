@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Active nav
     const current = location.pathname.split('/').pop();
     document.querySelectorAll('.nav-desktop a, .nav-mobile a').forEach(link => {
-        if (link.getAttribute('href') === current || link.getAttribute('href') === './tools.html') {
+        if (link.getAttribute('href') === current || link.getAttribute('href') === './tools') {
             link.classList.add('active');
         }
     });

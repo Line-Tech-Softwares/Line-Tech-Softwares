@@ -70,6 +70,18 @@ document.addEventListener('DOMContentLoaded', function () {
 		console.warn('Hamburger or nav-mobile element not found:', {hamburger, navMobile});
 	}
 
+	const supportNote = document.querySelector('.support-note');
+	if (supportNote) {
+		const supportLink = supportNote.querySelector('.text-link');
+		const supportPanel = document.createElement('div');
+		supportPanel.className = 'support-panel';
+		supportPanel.hidden = true;
+		supportPanel.innerHTML = '<button type="button" class="support-close" aria-label="Close technical support panel"><i class="fas fa-xmark"></i></button><p class="eyebrow blue">TECHNICAL SUPPORT</p><h3>Keep your systems moving.</h3><p>Get help with setup, troubleshooting, security configuration, maintenance or deployment.</p><a href="mailto:info@linetechsoftwares.co.za?subject=Technical%20Support%20Request" class="button button-primary">Email Support <i class="fas fa-envelope"></i></a>';
+		supportNote.appendChild(supportPanel);
+		if (supportLink) supportLink.addEventListener('click', event => { event.preventDefault(); supportPanel.hidden = false; });
+		supportPanel.querySelector('.support-close').addEventListener('click', () => { supportPanel.hidden = true; });
+	}
+
 	// ===== SERVICE FILTER =====
 	function initializeServiceFilter() {
 		const filterToggle = document.getElementById('filter-toggle');

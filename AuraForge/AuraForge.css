@@ -1,5 +1,6 @@
 /* ==========================================================================
    AuraForge Modern Dark Theme Stylesheet
+   AuraForge Modern Dark Theme Stylesheet
    ========================================================================== */
 
 :root {
@@ -55,6 +56,7 @@ ul {
 .highlight {
   background: linear-gradient(135deg, var(--primary-orange), var(--accent-amber));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
@@ -530,6 +532,24 @@ ul {
 .footer-col a:hover { color: var(--primary-orange); }
 
 .copyright { text-align: center; color: var(--text-dim); font-size: 0.85rem; }
+
+.back-home-btn { position: absolute; left: 1.5rem; top: 1rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--text-muted); font-size: .82rem; text-decoration: none; z-index: 2; }
+.back-home-btn:hover { color: var(--primary-orange); }
+
+.back-home-btn {
+  position: absolute;
+  left: 1.5rem;
+  top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--text-muted);
+  font-size: .82rem;
+  text-decoration: none;
+  z-index: 2;
+}
+
+.back-home-btn:hover { color: var(--primary-orange); }
 
 .back-to-top {
   position: fixed;

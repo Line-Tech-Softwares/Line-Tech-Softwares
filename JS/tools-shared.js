@@ -71,7 +71,7 @@ const showThankYou = (toolName, plan = getPlan()) => {
 function purchasePlan(plan) {
     setPlan(plan);
     closeThankYou();
-    window.location.href = '../index.html#contact';
+    window.location.href = '../#contact';
 }
 
 function signupAccount() {

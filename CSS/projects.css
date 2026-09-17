@@ -396,6 +396,11 @@
 }
 
 /* Responsive Design */
+.footer-content { max-width: 1200px; margin: 0 auto 3rem; display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr; gap: 2rem; }
+.footer-section { min-width: 0; }
+.footer-links { list-style: none; padding: 0; }
+.footer-links a { overflow-wrap: anywhere; }
+
 @media (max-width: 768px) {
     .projects-hero {
         min-height: 50vh;
@@ -458,6 +463,8 @@
         width: 100%;
         justify-content: center;
     }
+
+    .footer-content { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 }
 
 @media (max-width: 480px) {
@@ -489,6 +496,8 @@
     .project-content {
         padding: 1.25rem;
     }
+
+    .footer-content { grid-template-columns: 1fr; }
 
     .project-title {
         font-size: 1.1rem;
