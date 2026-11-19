@@ -50,27 +50,12 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    const name = document.querySelector("#name").value.trim();
-    const email = document.querySelector("#email").value.trim();
-    const phone = document.querySelector("#phone").value.trim();
-    const service = document.querySelector("#service").value;
-    const message = document.querySelector("#message").value.trim();
+    const name = form.elements.namedItem("name").value.trim();
+    const email = form.elements.namedItem("email").value.trim();
+    const message = form.elements.namedItem("message").value.trim();
 
-    // Validation
-    if (!name || !email || !phone) {
+    if (!name || !email || !message) {
         warningText.textContent = "Please fill in all required fields.";
-        warningMessage.style.display = "block";
-        return;
-    }
-
-    if (name.split(" ").length < 2) {
-        warningText.textContent = "Please enter your full name (at least 2 words).";
-        warningMessage.style.display = "block";
-        return;
-    }
-
-    if (!/^(?:[6-8][0-9]{8}|0[6-8][0-9]{8}|\+27[6-8][0-9]{8})$/.test(phone.replace(/\s+/g, ""))) {
-        warningText.textContent = "Please enter a valid South African phone number.";
         warningMessage.style.display = "block";
         return;
     }
@@ -116,7 +101,7 @@ form.addEventListener("submit", async (e) => {
         clearTimeout(slowConnectionTimer);
         warningMessage.style.display = "none";
 
-        if (response.ok) {
+        if (response.ok && result.success) {
             document.querySelector("#success-message").style.display = "block";
             document.querySelector("#error-message").style.display = "none";
             form.reset();
